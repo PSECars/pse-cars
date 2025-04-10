@@ -14,4 +14,7 @@ Each component of the application is located in its own subdirectory.
 The subdirectories are named after the component they contain.
 
 Each subdirectory should contain a `compose.yaml` file that is included into the root-level `compose.yaml`.
-The subdirectory `compose.yaml` files should contain all necessary services for the component to run, as well as the component itself.
+d The subdirectory `compose.yaml` files should contain all necessary services for the component to run, as well as the component itself.
+
+## Documentation
+For detailed documentation of the project and its architecture, please refer to the `docs` directory.
