@@ -1,103 +1,128 @@
+"use client";
+
 import Image from "next/image";
+
+import Hero from "./assets/hero.webp";
+import Button from "@/app/components/Button";
+import ModelPreview from "@/app/components/ModelPreview";
+import Card2 from "./assets/card-2.webp";
+import Card3 from "./assets/card-3.webp";
+import Card4 from "./assets/card-4.webp";
+import Card1 from "./assets/card-1.webp";
+import CarView from "./assets/car-view.webp";
+import Map from "./assets/map.webp";
+import App from "./assets/app.webp";
+import MerchPreview from "./assets/merch-preview.webp";
+import {IconSun} from "@tabler/icons-react";
+import TextInput from "@/app/components/TextInput";
+import Logo from "@/app/assets/logo.webp";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    <div className="overflow-x-hidden">
+      <main className="flex flex-col items-center px-10 max-w-400 mx-auto bg-surface-primary">
+        <section aria-label={"Hero Section"} className="flex flex-col items-center justify-center w-full h-screen z-10">
+            <Image className="absolute object-cover w-screen h-screen -z-10" src={Hero} alt="PSE Cars Hero Image" fill />
+            <div className="flex flex-col items-center justify-center w-full h-full">
+                <h1 className="text-5xl text-font-primary text-center font-medium leading-16">THE FUTURE OF DRIVING<br/>STARTS WITH PSECARS</h1>
+                <h4 className={"text-xl text-font-primary text-center font-normal leading-18"}>Where innovation meets elegance.</h4>
+                <div className={"flex flex-row gap-8"}>
+                    <Button onClick={() => {}}>
+                        Configure now
+                    </Button>
+                    <Button variant={"secondary"} onClick={() => {}}>
+                        Explore Models
+                    </Button>
+                </div>
+            </div>
+        </section>
+          <section className={"flex flex-col w-full py-16 gap-8"}>
+              <div className={"flex flex-row justify-between"}>
+                  <h2 className={"text-4xl font-medium"}>Models</h2>
+                  <Button onClick={() => {}}>Discover all Models</Button>
+              </div>
+              <div className={"flex flex-row gap-8"}>
+                  <ModelPreview image={Card1} modelName={"Tempest"} modelDescription={"Pure Performance"} />
+                    <ModelPreview image={Card2} modelName={"Emissary"} modelDescription={"Elegant Power"} />
+                    <ModelPreview image={Card3} modelName={"Velocity"} modelDescription={"Redefining Speed"} />
+                    <ModelPreview image={Card4} modelName={"Apex"} modelDescription={"Exceptional Luxury"} />
+              </div>
+          </section>
+          <section className={""}>
+                <div className={"flex flex-col w-full py-16 gap-8 text-center"}>
+                    <h2 className={"text-4xl font-medium"}>Make it yours.</h2>
+                    <p className={"text-lg font-normal text-font-secondary"}>Customize every detail of your dream car -<br/>
+                        from inventory to color.</p>
+                    <Button className={"mx-auto"} onClick={() => {}}>Start Configuring</Button>
+                </div>
+              <Image src={CarView} alt={""} className={"w-full h-auto"} />
+          </section>
+          <section className={"relative flex flex-col items-center justify-center w-full h-screen mt-16"}>
+                <Image src={Map} alt={""} className={"absolute object-cover w-screen h-screen"} fill />
+                <div className={"absolute flex flex-col items-center justify-center w-full h-full gap-8"}>
+                    <div className={"flex flex-row gap-4"}>
+                        <div className={"p-4 border border-outline-primary rounded-full bg-surface-secondary h-16 w-16 flex items-center justify-center"}>
+                            <IconSun/>
+                        </div>
+                        <div className={"flex flex-col"}>
+                            <h3 className={"text-3xl font-normal text-font-primary"}>Ljublijana</h3>
+                            <p className={"text-lg font-light text-font-secondary"}>22°C</p>
+                        </div>
+                    </div>
+                    <h2 className={"text-4xl font-medium text-font-primary"}>Follow the global journey of our<br/>legendary prototype - PSECAR0</h2>
+                    <Button className={"mx-auto"} onClick={() => {}}>Track PSCAR0</Button>
+                </div>
+          </section>
+          <section className={"relative flex flex-col items-center justify-center w-full h-screen mt-16"}>
+              <div className={"flex flex-row gap-16 w-full text-start"}>
+                    <div className={"flex flex-col items-start justify-center w-full h-full gap-8 flex-1"}>
+                        <div className={"flex flex-col gap-4"}>
+                        <h2 className={"text-4xl font-medium text-font-primary"}>Remote access, climate
+                            control and full customization</h2>
+                        <p className={"text-lg font-light text-font-secondary"}>Everything you need right from your Phone.</p>
+                        </div>
+                        <Button className={"mr-auto"} onClick={() => {}}>Open Control Panel</Button>
+                    </div>
+                    <Image src={App} alt={""} className={"w-100 flex-0"} />
+              </div>
+          </section>
+          <section className={"w-screen"}>
+              <Image src={MerchPreview} alt={"Merch Preview"} className={"w-screen h-auto"} />
+                <div className={"flex flex-col w-full py-16 gap-8 text-center"}>
+                    <div className={"flex flex-col gap-4"}>
+                    <h2 className={"text-4xl font-medium"}>PSE Lifestyle Collection</h2>
+                    <p className={"text-lg font-normal text-font-secondary"}>Discover the exclusive PSECar Merchandise.</p>
+                    </div>
+                    <Button className={"mx-auto"} onClick={() => {}}>Shop Now</Button>
+                </div>
+          </section>
+          <section className={"flex flex-col w-full py-16 gap-8"}>
+              <div className={"flex flex-col w-full py-16 gap-8 text-center"}>
+                  <div className={"flex flex-col gap-4"}>
+                      <h2 className={"text-4xl font-medium"}>Stay in the loop.</h2>
+                      <p className={"text-lg font-normal text-font-secondary"}>Get early access to new models, events, and PSECar0 stories.</p>
+                  </div>
+                <TextInput className={"mx-auto"} onSubscribe={() => {}}/>
+              </div>
+          </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <footer className={"flex flex-col items-center justify-center w-full h-32 bg-surface-secondary text-font-primary border-t-2 border-t-outline-tertiary py-48"}>
+            <div className={"flex flex-row gap-8"}>
+                <Image src={Logo} alt="PSE Cars Logo" className="w-24 h-8" /> {/* TODO: Original aspect ratio */}
+                <p className={"text-lg font-normal"}>Cars</p>
+                <p className={"text-lg font-normal"}>Configurator</p>
+                <p className={"text-lg font-normal"}>WorldDrive</p>
+                <p className={"text-lg font-normal"}>Merchandise</p>
+                <p className={"text-lg font-normal"}>MyPSECar</p>
+            </div>
+            <div className={"flex flex-row gap-8 mt-4"}>
+                <p className={"text-sm font-normal text-font-secondary"}>Privacy Policy</p>
+                <p className={"text-sm font-normal text-font-secondary"}>Imprint</p>
+            </div>
+            <div className={"flex flex-row gap-8 mt-16"}>
+                <p className={"text-sm font-light text-font-secondary"}>© 2025 PSE Cars. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
   );
 }
