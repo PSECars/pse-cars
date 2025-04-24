@@ -1,2 +1,5 @@
 /.idea/
 /pse-cars.iml
+
+**/node_modules
+**/.next
