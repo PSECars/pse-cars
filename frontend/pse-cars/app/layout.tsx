@@ -5,6 +5,7 @@ import {IconShoppingBag} from "@tabler/icons-react";
 import Image from "next/image";
 
 import Logo from "./assets/logo.webp"
+import Link from "next/link";
 
 // If loading a variable font, you don't need to specify the font weight
 const figtree = Figtree({ subsets: ['latin'] })
@@ -27,7 +28,7 @@ export default function RootLayout({
       {/* NAVBAR */}
         <div className="flex flex-row w-full">
             <div className="fixed flex flex-row items-center justify-between w-full px-8 py-6 bg-surface-secondary text-font-primary border-b-2 border-b-outline-tertiary z-20">
-                <Image src={Logo} alt="PSE Cars Logo" className="w-24 h-8" /> {/* TODO: Original aspect ratio */}
+                <Link href="/" className="hover:text-font-secondary"><Image src={Logo} alt="PSE Cars Logo" className="w-24 h-8" /></Link> {/* TODO: Original aspect ratio */}
                 <nav className="flex space-x-4">
                 <a href="/cars" className="hover:text-font-secondary">Cars</a>
                 <a href="/configurator" className="hover:text-font-secondary">Configurator</a>
