@@ -1,2 +1,42 @@
-include:
-  - ./webapp/compose.yaml
+---
+
+services:
+  pse-cars-frontend:
+    build:
+      context: ./frontend/pse-cars
+    image: pse-cars/frontend
+
+  pse-cars-backend-configurator:
+    build:
+      context: ./backend/configurator
+    image: pse-cars/backend/configurator
+
+  pse-cars-backend-world-drive:
+    build:
+      context: ./backend/word-drive
+    image: pse-cars/backend/world-drive
+
+  pse-cars-backend-merch:
+    build:
+      context: ./backend/merch
+    image: pse-cars/backend/merch
+
+  pse-cars-backend-iot:
+    build:
+      context: ./backend/IoT
+    image: pse-cars/backend/iot
+
+  pse-cars-idp:
+    image: keycloak/keycloak:26.2
+
+  pse-cars-gateway:
+    image: '' #TODO
+
+volumes:
+  db-configurator:
+
+secrets: {} # TODO
+
+networks:
+  backend:
+  frontend:
