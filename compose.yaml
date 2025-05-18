@@ -15,7 +15,7 @@ services:
 
   pse-cars-backend-world-drive:
     build:
-      context: ./backend/word-drive
+      context: backend/world-drive
     image: pse-cars/backend/world-drive
 
   pse-cars-backend-merch:
