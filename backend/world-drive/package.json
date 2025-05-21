@@ -1,0 +1,21 @@
+{
+  "name": "world-drive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "node index.ts"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "@turf/turf": "^7.2.0",
+    "express": "5.1.0",
+    "ws": "8.18.1"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.1",
+    "@types/node": "22.15.3",
+    "@types/ws": "8.18.1",
+    "typescript": "5.8.3"
+  }
+}
