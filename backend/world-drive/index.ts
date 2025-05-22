@@ -47,6 +47,11 @@ wss.on('connection', (ws: WebSocket) => {
     })
 })
 
+app.get('/coordinates/trail', (req, res) => {
+    const earlierCoordinates = coordinateService.getEarlierPositions()
+    res.json(earlierCoordinates)
+})
+
 app.get('/weather', async (req, res) => {
     let coordinate: Coordinate
 

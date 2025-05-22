@@ -45,7 +45,7 @@ export class CoordinateService {
 
         const [newLongitude, newLatitude] = destination.geometry.coordinates
 
-        this.directionInDegrees += (Math.random() - 0.5) * 36
+        this.directionInDegrees += (Math.random() - 0.5) * 72
         this.directionInDegrees = this.directionInDegrees <= -180
             ? 180 + (this.directionInDegrees % 180)
             : this.directionInDegrees > 180
@@ -98,6 +98,13 @@ export class CoordinateService {
      */
     public getCurrentPosition() {
         return this.currentCoordinate
+    }
+
+    /**
+     * Get the previous coordinates in form
+     */
+    public getEarlierPositions() {
+        return Array.from(this.coordinatesMap.values())
     }
 }
 
