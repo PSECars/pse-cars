@@ -1,8 +1,8 @@
 'use client'
 import {useEffect, useState} from "react"
 import currentPositionApiService, {Coordinate} from "@/app/world-drive/service/currentPositionApiService"
-import GoogleMapsComponent from "@/app/world-drive/components/GoogleMapsComponent";
 import WeatherComponent from "@/app/world-drive/components/WeatherComponent";
+import MapboxComponent from "@/app/world-drive/components/MapboxComponent";
 
 export default function WorldDriveComponent() {
     const [position, setPosition] = useState<Coordinate>({lat: 48.8603192, lng: 9.1780495})
@@ -15,7 +15,7 @@ export default function WorldDriveComponent() {
 
     return (
         <>
-            <GoogleMapsComponent position={position}/>
+            <MapboxComponent position={position}/>
             <WeatherComponent position={position}/>
         </>
     )

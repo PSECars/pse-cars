@@ -6,7 +6,7 @@ export interface WeatherData {
 
 export class WeatherApiService {
     static async getWeatherAtCurrentPosition(): Promise<WeatherData> {
-        const response = await fetch('/api/weather');
+        const response = await fetch('/api/world-drive/weather?position=current');
         if (!response.ok) {
             throw new Error('Failed to fetch weather data');
         }
