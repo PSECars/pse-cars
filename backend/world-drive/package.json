@@ -2,9 +2,9 @@
   "name": "world-drive",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "node index.ts"
+    "start": "node src/index.ts"
   },
   "type": "commonjs",
   "dependencies": {

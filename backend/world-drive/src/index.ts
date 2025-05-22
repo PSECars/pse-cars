@@ -2,7 +2,7 @@ import coordinateService, { Subscriber } from './service/coordinateService'
 import express from 'express'
 import http from 'http'
 import WebSocket from 'ws'
-import {Coordinate} from "./types/sharedTypes"
+import {Coordinate} from "./types/Coordinate"
 import wttrInService from "./service/wttrInService"
 import coordinateValidator from "./service/coordinateValidator";
 
@@ -58,7 +58,7 @@ app.get('/weather', async (req, res) => {
     if (req.query.position === 'current') {
         coordinate = coordinateService.getCurrentPosition()
     } else {
-        coordinate = { lat: parseFloat(req.query.lat as string), lng: parseFloat(req.query.lng as string) }
+        coordinate = { latitude: parseFloat(req.query.lat as string), longitude: parseFloat(req.query.lng as string) }
 
         if (!coordinateValidator.isValidCoordinate(coordinate)) {
             res.status(400).send('Invalid coordinate')
