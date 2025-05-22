@@ -6,9 +6,10 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import {GeoJSON} from "geojson"
 import {LayerProps} from "react-map-gl"
 import {TrailApiService} from "@/app/world-drive/service/trailApiService"
+import {Coordinate} from "@/app/world-drive/service/currentPositionApiService";
 
 export interface MapboxComponentProps {
-    position: { lat: number, lng: number }
+    position: Coordinate
 }
 
 const MapboxComponent: FC<MapboxComponentProps> = ({position}) => {
@@ -17,15 +18,15 @@ const MapboxComponent: FC<MapboxComponentProps> = ({position}) => {
     const [trail, setTrail] = useState<number[][]>([])
 
     const handleCenter = () => {
-        mapRef.current?.flyTo({center: [position.lng, position.lat], zoom: 8})
+        mapRef.current?.flyTo({center: [position.longitude, position.latitude], zoom: 8})
     }
 
     useEffect(() => {
-        TrailApiService.getTrail().then(r => setTrail(r.map(c => [c.lng, c.lat])))
+        TrailApiService.getTrail().then(r => setTrail(r.map(c => [c.longitude, c.latitude])))
     }, [])
 
     useEffect(() => {
-        setTrail(prevTrail => [...prevTrail, [position.lng, position.lat]])
+        setTrail(prevTrail => [...prevTrail, [position.longitude, position.latitude]])
     }, [position])
 
     const trailGeoJson: GeoJSON = {
@@ -71,11 +72,11 @@ const MapboxComponent: FC<MapboxComponentProps> = ({position}) => {
             <Map ref={mapRef}
                  mapboxAccessToken={mapboxToken}
                  mapStyle="mapbox://styles/mapbox/streets-v12"
-                 initialViewState={{latitude: position.lat, longitude: position.lng, zoom: 8}}
+                 initialViewState={{latitude: position.latitude, longitude: position.longitude, zoom: 8}}
                  maxZoom={20}
                  minZoom={3}
                  attributionControl={false}>
-                <Marker latitude={position.lat} longitude={position.lng} anchor="center" color="red"/>
+                <Marker latitude={position.latitude} longitude={position.longitude} anchor="center" color="red"/>
                 <Source id="trail" type="geojson" data={trailGeoJson} lineMetrics={true}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/*@ts-ignore*/}

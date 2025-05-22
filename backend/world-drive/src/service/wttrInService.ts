@@ -1,4 +1,5 @@
-import {Coordinate, WeatherData} from "../types/sharedTypes";
+import {Coordinate} from "../types/Coordinate";
+import {WeatherData} from "../types/WeatherData";
 
 /**
  * Client service for the wttr.in API.
@@ -23,7 +24,7 @@ class WttrInService {
      * @param coordinate of the position to get the weather to.
      */
     async getWeatherAt(coordinate: Coordinate): Promise<WeatherData> {
-        const url = `https://wttr.in/${coordinate.lat},${coordinate.lng}?format=j1`;
+        const url = `https://wttr.in/${coordinate.latitude},${coordinate.longitude}?format=j1`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Failed to fetch weather data: ${response.statusText}`);

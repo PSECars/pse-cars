@@ -1,4 +1,4 @@
-import {Coordinate} from "../types/sharedTypes";
+import {Coordinate} from "../types/Coordinate";
 
 /**
  * Utility class for validating GPS coordinates.
@@ -17,7 +17,7 @@ export default class CoordinateValidator {
      * @param coordinate the coordinate to validate.
      */
     public static isValidCoordinate(coordinate: Coordinate): boolean {
-        return this.isValidLatitude(coordinate.lat) && this.isValidLongitude(coordinate.lng);
+        return this.isValidLatitude(coordinate.latitude) && this.isValidLongitude(coordinate.longitude);
     }
 }
 

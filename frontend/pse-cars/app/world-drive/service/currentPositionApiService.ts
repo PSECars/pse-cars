@@ -1,6 +1,6 @@
 export type Coordinate = {
-    lat: number
-    lng: number
+    latitude: number
+    longitude: number
 }
 
 type CoordinateCallback = (coordinate: Coordinate) => void

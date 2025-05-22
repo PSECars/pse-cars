@@ -1,5 +1,5 @@
 import * as turf from '@turf/turf'
-import {Coordinate} from "../types/sharedTypes";
+import {Coordinate} from "../types/Coordinate";
 
 /**
  * Observer interface for classes that want to be notified of new GPS coordinates.
@@ -20,7 +20,7 @@ export class CoordinateService {
     private subscribers: Subscriber[] = []
 
     constructor() {
-        this.currentCoordinate = { lat: 48.8603192, lng: 9.1780495 }
+        this.currentCoordinate = { latitude: 48.8603192, longitude: 9.1780495 }
         this.directionInDegrees = Math.random() * 360 // Random initial direction
         this.start()
     }
@@ -40,7 +40,7 @@ export class CoordinateService {
      */
     private generateNextCoordinate(): void {
         const distanceInKm = 10
-        const point = turf.point([this.currentCoordinate.lng, this.currentCoordinate.lat])
+        const point = turf.point([this.currentCoordinate.longitude, this.currentCoordinate.latitude])
         const destination = turf.destination(point, distanceInKm, this.directionInDegrees, { units: 'kilometers' })
 
         const [newLongitude, newLatitude] = destination.geometry.coordinates
@@ -52,7 +52,7 @@ export class CoordinateService {
                 ? -180 + (this.directionInDegrees % 180)
                 : this.directionInDegrees
 
-        this.currentCoordinate = { lat: newLatitude, lng: newLongitude }
+        this.currentCoordinate = { latitude: newLatitude, longitude: newLongitude }
         this.coordinatesMap.set(Date.now(), this.currentCoordinate)
 
         this.notifySubscribers()
