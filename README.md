@@ -3,11 +3,13 @@ This is the repository for the PSE Cars project.
 Please refer to the sections below on how to use this repo and for further information.
 
 ## Deploying the Application
-Use the `compose.yaml` file in the root directory of the repository to start the complete application.
+First, copy the `.env.example` file to `.env` in the root directory of the repository.
+Fill in the necessary environment variables in the `.env` file.
+
+Then you can use the `compose.yaml` file in the root directory of the repository to start the complete application.
 Simply open the root directory of the repository in a command line and type `docker compose up -d`.
 
-[//]: # (TODO)
-Then you should be able to access the application at `http://localhost:????`.
+You should be able to access the application at `http://localhost:80`.
 
 ## How to use this Repo
 Each component of the application is located in its own subdirectory.

@@ -9,7 +9,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 
 const app = express()
-const port = 3000
+const port = 3001
 
 const swaggerSpec = swaggerJSDoc({
     definition: {

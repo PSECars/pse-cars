@@ -1,5 +1,6 @@
 import * as turf from '@turf/turf'
 import {Coordinate} from "../types/Coordinate";
+import coordinateDBService from './coordinateDBService'
 
 /**
  * Observer interface for classes that want to be notified of new GPS coordinates.
@@ -8,21 +9,23 @@ export interface Subscriber {
     notify(coordinate: Coordinate): void
 }
 
+// TODO: move this generator to another microservice and use MQTT to receive the coordinates here
 /**
  * Coordinate Service simulates the generation of GPS coordinates for our vehicle.
  */
 export class CoordinateService {
     private static instance: CoordinateService
 
-    private coordinatesMap: Map<number, Coordinate> = new Map()
-    private currentCoordinate: Coordinate
-    private directionInDegrees: number
+    private currentCoordinate: Coordinate = {latitude: 48.8603192, longitude: 9.1780495}
+    private directionInDegrees: number = Math.random() * 360 // Random initial direction
     private subscribers: Subscriber[] = []
 
     constructor() {
-        this.currentCoordinate = { latitude: 48.8603192, longitude: 9.1780495 }
-        this.directionInDegrees = Math.random() * 360 // Random initial direction
-        this.start()
+        coordinateDBService.loadLatestCoordinate().then(latestCoordinate => {
+            if (latestCoordinate) {
+                this.currentCoordinate = latestCoordinate
+            }
+        }).finally(() => this.start())
     }
 
     /**
@@ -53,7 +56,7 @@ export class CoordinateService {
                 : this.directionInDegrees
 
         this.currentCoordinate = { latitude: newLatitude, longitude: newLongitude }
-        this.coordinatesMap.set(Date.now(), this.currentCoordinate)
+        coordinateDBService.saveCoordinate(this.currentCoordinate, Date.now()).then()
 
         this.notifySubscribers()
     }
@@ -104,7 +107,7 @@ export class CoordinateService {
      * Get the previous coordinates in form
      */
     public getEarlierPositions() {
-        return Array.from(this.coordinatesMap.values())
+        return [] // This method no longer retrieves earlier positions from local storage
     }
 }
 

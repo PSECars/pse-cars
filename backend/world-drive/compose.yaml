@@ -1,0 +1,38 @@
+services:
+  pse-cars-backend-world-drive:
+    build:
+      context: .
+    image: pse-cars/backend/world-drive
+    networks:
+      - world-drive
+      - default
+    environment:
+      - WORLD_DRIVE_INFLUXDB_URL=${WORLD_DRIVE_INFLUXDB_URL}
+      - WORLD_DRIVE_INFLUXDB_ADMIN_TOKEN=${WORLD_DRIVE_INFLUXDB_ADMIN_TOKEN}
+      - WORLD_DRIVE_INFLUXDB_ORG=${WORLD_DRIVE_INFLUXDB_ORG}
+      - WORLD_DRIVE_INFLUXDB_BUCKET=${WORLD_DRIVE_INFLUXDB_BUCKET}
+  influxdb:
+    image: influxdb:2.7
+    container_name: pse-cars-influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${WORLD_DRIVE_INFLUXDB_USER}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${WORLD_DRIVE_INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${WORLD_DRIVE_INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${WORLD_DRIVE_INFLUXDB_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${WORLD_DRIVE_INFLUXDB_ADMIN_TOKEN}
+    networks:
+      - world-drive
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  world-drive:
+    driver: bridge
