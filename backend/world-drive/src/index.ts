@@ -1,4 +1,13 @@
-import coordinateService, { Subscriber } from './service/coordinateService'
+import dotenv from 'dotenv'
+
+const dotenvFile = dotenv.config({path: '../../local.env'})
+if (dotenvFile.error) {
+    console.error("Error loading .env file:", dotenvFile.error)
+} else {
+    console.info("Successfully loaded local.env file")
+}
+
+import coordinateService, {Subscriber} from './service/coordinateService'
 import express from 'express'
 import http from 'http'
 import WebSocket from 'ws'
@@ -7,6 +16,7 @@ import wttrInService from "./service/wttrInService"
 import coordinateValidator from "./service/coordinateValidator"
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
+import path from 'path'
 
 const app = express()
 const port = 3001
@@ -19,11 +29,11 @@ const swaggerSpec = swaggerJSDoc({
             version: "1.0.0",
         },
     },
-    apis: ["./src/index.ts"],
+    apis: [path.join(__dirname, '**/index.*')],
 })
 
 const server = http.createServer(app)
-const wss = new WebSocket.Server({ noServer: true })
+const wss = new WebSocket.Server({noServer: true})
 
 /**
  * @swagger
@@ -48,7 +58,7 @@ class WebSocketNotifier implements Subscriber {
 
     notify(coordinate: Coordinate): void {
         if (this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify({ coordinate }))
+            this.ws.send(JSON.stringify({coordinate}))
         }
     }
 }
@@ -67,7 +77,7 @@ wss.on('connection', (ws: WebSocket) => {
     const notifier = new WebSocketNotifier(ws)
     coordinateService.subscribe(notifier)
 
-    ws.send(JSON.stringify({ coordinate: coordinateService['currentCoordinate'] }))
+    ws.send(JSON.stringify({coordinate: coordinateService['currentCoordinate']}))
 
     ws.on('close', () => {
         coordinateService.unsubscribe(notifier)
@@ -164,7 +174,7 @@ app.get('/weather', async (req, res) => {
     if (req.query.position === 'current') {
         coordinate = coordinateService.getCurrentPosition()
     } else {
-        coordinate = { latitude: parseFloat(req.query.lat as string), longitude: parseFloat(req.query.lng as string) }
+        coordinate = {latitude: parseFloat(req.query.lat as string), longitude: parseFloat(req.query.lng as string)}
 
         if (!coordinateValidator.isValidCoordinate(coordinate)) {
             res.status(400).send('Invalid coordinate')
@@ -193,7 +203,7 @@ app.get('/weather', async (req, res) => {
  *         description: Service is healthy
  */
 app.get('/health', (req, res) => {
-    res.status(200).send('healthy')
+    res.status(200).json({name: 'pse-cars-backend-world-drive', status: 'healthy'})
 })
 
 /**

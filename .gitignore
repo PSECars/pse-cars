@@ -4,4 +4,4 @@
 **/node_modules
 **/.next
 
-*.env
+#*.env # In a real project, this should be here. We will commit .env files for the sake of the correctors trying to boot the project.
