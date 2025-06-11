@@ -16,14 +16,15 @@ const MapboxComponent: FC<MapboxComponentProps> = ({position}) => {
     const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
     const mapRef = useRef<MapRef>(null)
     const [trail, setTrail] = useState<number[][]>([])
+    const [trailSince, setTrailSince] = useState<number>(Date.now() - 1000 * 60 * 60) // Default to last hour
 
     const handleCenter = () => {
         mapRef.current?.flyTo({center: [position.longitude, position.latitude], zoom: 8})
     }
 
     useEffect(() => {
-        TrailApiService.getTrail().then(r => setTrail(r.map(c => [c.longitude, c.latitude])))
-    }, [])
+        TrailApiService.getTrail(trailSince).then(r => setTrail(r.map(c => [c.longitude, c.latitude])))
+    }, [trailSince])
 
     useEffect(() => {
         setTrail(prevTrail => [...prevTrail, [position.longitude, position.latitude]])
@@ -57,7 +58,18 @@ const MapboxComponent: FC<MapboxComponentProps> = ({position}) => {
 
     return (
         <div className="relative w-full h-[calc(100vh-5rem)] overflow-hidden">
-            <span className="absolute right-5 bottom-5 z-50">
+            <span className="absolute right-5 bottom-5 z-50 flex gap-2">
+                <span className="relative group">
+                  <select className="rounded-md cursor-pointer bg-surface-secondary p-2 text-white h-[2.5rem]"
+                          value={trailSince} onChange={e => setTrailSince(Number(e.target.value))}>
+                      <option value={Date.now() - 1000 * 60 * 60}>Last hour</option>
+                      <option value={new Date().setHours(0, 0, 0, 0)}>Today</option>
+                      <option value={0}>All time</option>
+                  </select>
+                  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-1 w-max px-2 py-1 rounded bg-surface-secondary text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Show path for
+                  </span>
+                </span>
                 <button className="rounded-md cursor-pointer bg-surface-secondary p-2" onClick={handleCenter}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>

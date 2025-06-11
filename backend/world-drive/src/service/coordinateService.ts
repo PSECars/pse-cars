@@ -102,13 +102,6 @@ export class CoordinateService {
     public getCurrentPosition() {
         return this.currentCoordinate
     }
-
-    /**
-     * Get the previous coordinates in form
-     */
-    public getEarlierPositions() {
-        return [] // This method no longer retrieves earlier positions from local storage
-    }
 }
 
 export default CoordinateService.getInstance()

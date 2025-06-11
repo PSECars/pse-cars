@@ -7,16 +7,17 @@ if (dotenvFile.error) {
     console.info("Successfully loaded local.env file")
 }
 
-import coordinateService, {Subscriber} from './service/coordinateService'
 import express from 'express'
 import http from 'http'
 import WebSocket from 'ws'
 import {Coordinate} from "./types/Coordinate"
-import wttrInService from "./service/wttrInService"
-import coordinateValidator from "./service/coordinateValidator"
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import path from 'path'
+import coordinateValidator from "./service/coordinateValidator"
+import wttrInService from "./service/wttrInService"
+import coordinateService, {Subscriber} from './service/coordinateService'
+import coordinateDBService from "./service/coordinateDBService";
 
 const app = express()
 const port = 3001
@@ -92,6 +93,13 @@ wss.on('connection', (ws: WebSocket) => {
  *     description: Get the earlier coordinates of the PSE car
  *     tags:
  *       - HTTP
+ *     parameters:
+ *       - name: since
+ *         in: query
+ *         description: Timestamp in milliseconds since when to load coordinates
+ *         required: true
+ *         schema:
+ *           type: number
  *     responses:
  *       200:
  *         description: Earlier coordinates
@@ -101,6 +109,10 @@ wss.on('connection', (ws: WebSocket) => {
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Coordinate'
+ *       400:
+ *         description: Invalid timestamp
+ *       500:
+ *         description: Error while fetching earlier coordinates
  *
  * components:
  *   schemas:
@@ -113,8 +125,19 @@ wss.on('connection', (ws: WebSocket) => {
  *           type: number
  */
 app.get('/coordinates/trail', (req, res) => {
-    const earlierCoordinates = coordinateService.getEarlierPositions()
-    res.json(earlierCoordinates)
+    const since = Number(req.query.since)
+
+    if(isNaN(since) || since < 0) {
+        res.status(400).send('Invalid timestamp')
+        return
+    }
+
+    coordinateDBService.loadCoordinatesSince(since).then(earlierCoordinates => {
+        res.json(earlierCoordinates)
+    }).catch(e => {
+        console.error(`Error while fetching earlier coordinates since ${since}:`, e)
+        res.status(500).send('Error while fetching earlier coordinates')
+    })
 })
 
 /**
@@ -178,6 +201,7 @@ app.get('/weather', async (req, res) => {
 
         if (!coordinateValidator.isValidCoordinate(coordinate)) {
             res.status(400).send('Invalid coordinate')
+            return
         }
     }
 

@@ -1,6 +1,12 @@
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
 import { Coordinate } from '../types/Coordinate'
 
+interface CoordinateWithTimestamp {
+    latitude: number
+    longitude: number
+    timestamp?: number
+}
+
 /**
  * CoordinateDBService singleton class to handle coordinate db interactions.
  */
@@ -14,6 +20,7 @@ export class CoordinateDBService {
 
   private readonly influxDB = new InfluxDB({ url: this.url, token: this.token })
   private readonly writeApi = this.influxDB.getWriteApi(this.org, this.bucket, 'ms')
+  private readonly queryApi = this.influxDB.getQueryApi(this.org)
 
   /**
    * Get our singleton instance
@@ -40,47 +47,14 @@ export class CoordinateDBService {
   }
 
   /**
-   * Load all coordinates from the InfluxDB.
-   * @returns Array of coordinates with timestamps
-   */
-  async loadAllCoordinates(): Promise<{ latitude: number; longitude: number; timestamp: number }[]> {
-    const queryApi = this.influxDB.getQueryApi(this.org)
-    const fluxQuery = `from(bucket: "${this.bucket}") |> range(start: 0) |> filter(fn: (r) => r._measurement == "coordinate")`
-    const coordinates: { latitude: number; longitude: number; timestamp: number }[] = []
-    return new Promise((resolve, reject) => {
-      queryApi.queryRows(fluxQuery, {
-        next(row, tableMeta) {
-          const o = tableMeta.toObject(row)
-          if (o._field === 'latitude' || o._field === 'longitude') {
-            let coord = coordinates.find(c => c.timestamp === new Date(o._time).getTime())
-            if (!coord) {
-              coord = { latitude: NaN, longitude: NaN, timestamp: new Date(o._time).getTime() }
-              coordinates.push(coord)
-            }
-            if (o._field === 'latitude') coord.latitude = o._value
-            if (o._field === 'longitude') coord.longitude = o._value
-          }
-        },
-        error(error) {
-          reject(error)
-        },
-        complete() {
-          resolve(coordinates.filter(c => !isNaN(c.latitude) && !isNaN(c.longitude)))
-        }
-      })
-    })
-  }
-
-  /**
    * Load the latest coordinate from the InfluxDB.
    * @returns The latest coordinate with timestamp, or null if none found
    */
   async loadLatestCoordinate(): Promise<{ latitude: number; longitude: number; timestamp: number } | null> {
-    const queryApi = this.influxDB.getQueryApi(this.org)
     const fluxQuery = `from(bucket: "${this.bucket}") |> range(start: 0) |> filter(fn: (r) => r._measurement == "coordinate") |> sort(columns: ["_time"], desc: true) |> limit(n:2)`
     const latest: { latitude: number; longitude: number; timestamp: number } = { latitude: NaN, longitude: NaN, timestamp: NaN }
     return new Promise((resolve, reject) => {
-      queryApi.queryRows(fluxQuery, {
+      this.queryApi.queryRows(fluxQuery, {
         next(row, tableMeta) {
           const o = tableMeta.toObject(row)
           if (o._field === 'latitude') latest.latitude = o._value
@@ -100,6 +74,78 @@ export class CoordinateDBService {
       })
     })
   }
+
+    /**
+     * Load all coordinates from the InfluxDB since a given timestamp.
+     * Returns at most 300 coordinates, evenly distributed over the time range, as not to overload the client.
+     * @param sinceTimestamp Unix timestamp (ms) to start from
+     * @returns Array of Coordinate (latitude, longitude)
+     */
+    async loadCoordinatesSince(sinceTimestamp: number): Promise<Coordinate[]> {
+        // Use the oldest coordinate timestamp if it's younger than the given timestamp
+        const oldestTimestamp = await this.getOldestCoordinateTimestamp()
+        const effectiveSince = Math.max(sinceTimestamp, oldestTimestamp || 0)
+
+        const now = Date.now()
+        const totalPoints = 300
+        const intervalMs = Math.max(Math.floor((now - effectiveSince) / totalPoints), 1)
+        const intervalStr = intervalMs < 1000 ? '1ms' : intervalMs < 60000 ? `${Math.floor(intervalMs / 1000)}s` : `${Math.floor(intervalMs / 60000)}m`
+
+        const fluxQuery = `from(bucket: "${this.bucket}")
+          |> range(start: -${now - effectiveSince}ms)
+          |> filter(fn: (r) => r._measurement == "coordinate")
+          |> aggregateWindow(every: ${intervalStr}, fn: last, createEmpty: false)`
+
+        const coordinates: CoordinateWithTimestamp[] = []
+        return new Promise((resolve, reject) => {
+            this.queryApi.queryRows(fluxQuery, {
+                next(row, tableMeta) {
+                    const o = tableMeta.toObject(row)
+
+                    // Find or create the coordinate for this timestamp
+                    let coordinate = coordinates.find(c => c.timestamp === new Date(o._time).getTime())
+                    if (!coordinate) {
+                        coordinate = { latitude: NaN, longitude: NaN, timestamp: new Date(o._time).getTime() }
+                        coordinates.push(coordinate)
+                    }
+
+                    if (o._field === 'latitude') coordinate.latitude = o._value
+                    if (o._field === 'longitude') coordinate.longitude = o._value
+                },
+                error(error) {
+                    reject(error)
+                },
+                complete() {
+                    resolve(coordinates.filter(c => !isNaN(c.latitude) && !isNaN(c.longitude)).map(c => {
+                        delete c.timestamp
+                        return c
+                    }))
+                }
+            })
+        })
+    }
+
+    private async getOldestCoordinateTimestamp() {
+        const fluxQuery = `from(bucket: "${this.bucket}")
+          |> range(start: 0)
+          |> filter(fn: (r) => r._measurement == "coordinate")
+          |> sort(columns: ["_time"], desc: false)
+          |> limit(n:1)`
+        return new Promise<number | null>((resolve, reject) => {
+            let found = false
+            this.queryApi.queryRows(fluxQuery, {
+                next: (row, tableMeta) => {
+                    found = true
+                    const o = tableMeta.toObject(row)
+                    resolve(new Date(o._time).getTime())
+                },
+                error: (err) => reject(err),
+                complete: () => {
+                    if (!found) resolve(null)
+                }
+            })
+        })
+    }
 }
 
 export default CoordinateDBService.getInstance()
