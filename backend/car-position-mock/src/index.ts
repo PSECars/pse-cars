@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 const dotenvFile = dotenv.config({path: '../../local.env'})
 if (dotenvFile.error) {
-    console.error("Error loading .env file:", dotenvFile.error)
+    console.info("No .env file found.")
 } else {
     console.info("Successfully loaded local.env file")
 }
@@ -21,24 +21,20 @@ if (!MQTT_USERNAME || !MQTT_PASSWORD || !MQTT_TOPIC) {
     process.exit(1);
 }
 
-console.info(`Connecting to MQTT broker at ${MQTT_BROKER_URL}`);
-console.info(`Publishing to topic: ${MQTT_TOPIC}`);
+const mqttClient = mqtt.connect(MQTT_BROKER_URL, {
+  username: MQTT_USERNAME,
+  password: MQTT_PASSWORD
+})
 
-const mqttOptions: mqtt.IClientOptions = {};
-mqttOptions.username = MQTT_USERNAME;
-mqttOptions.password = MQTT_PASSWORD;
-
-const client = mqtt.connect(MQTT_BROKER_URL, mqttOptions);
-
-client.on('connect', () => {
+mqttClient.on('connect', () => {
   console.info(`Connected to MQTT broker at ${MQTT_BROKER_URL}`);
 });
 
-client.on('error', (err) => {
+mqttClient.on('error', (err) => {
   console.error('MQTT connection error:', err);
 });
 
-client.on('close', () => {
+mqttClient.on('close', () => {
   console.info('MQTT connection closed');
 });
 
@@ -49,7 +45,7 @@ class MqttCoordinatePublisher implements Subscriber {
   notify(coordinate: Coordinate): void {
     try {
       const payload = JSON.stringify(coordinate);
-      client.publish(MQTT_TOPIC, payload, { qos: 0 }, (err) => {
+      mqttClient.publish(MQTT_TOPIC, payload, { qos: 0 }, (err) => {
         if (err) {
           console.error('Failed to publish coordinate:', err);
         } else {

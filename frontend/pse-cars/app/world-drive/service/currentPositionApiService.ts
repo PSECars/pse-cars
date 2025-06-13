@@ -28,7 +28,7 @@ class CurrentPositionApiService {
             return
         }
 
-        this.ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_WORLD_DRIVE_HOST}/coordinates/current`)
+        this.ws = new WebSocket(`ws://localhost:3001/coordinates/current`) // TODO: this should be configurable
 
         this.ws.onmessage = (event) => {
             const data = JSON.parse(event.data)

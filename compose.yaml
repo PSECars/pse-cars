@@ -1,53 +1,49 @@
 ---
 
 include:
+  - ./compose-shared.yaml
   - ./backend/world-drive/compose.yaml # TODO: Refactoring and using include for other modules
 
 services:
   pse-cars-frontend:
     build:
       context: ./frontend/pse-cars
+      args:
+        - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
+        - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
     image: pse-cars/frontend
+    container_name: pse-cars-frontend
     ports:
       - "80:3000"
     environment:
       - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
       - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
-
-  pse-cars-backend-configurator:
-    build:
-      context: ./backend/configurator
-    image: pse-cars/backend/configurator
-
-  pse-cars-backend-merch:
-    build:
-      context: ./backend/merch
-    image: pse-cars/backend/merch
-
-  pse-cars-backend-iot:
-    build:
-      context: ./backend/IoT
-    image: pse-cars/backend/iot
-
-  pse-cars-idp:
-    image: keycloak/keycloak:26.2
-
-  pse-cars-gateway:
-    image: kong:3.9.0-alpine
-
-  mosquitto:
-    image: eclipse-mosquitto:2.0
-    restart: unless-stopped
-    container_name: pse-cars-mosquitto
-    ports:
-      - "1883:1883"   # MQTT protocol
-      - "9001:9001"   # MQTT over WebSockets
-    volumes:
-      - ./backend/mosquitto/config:/mosquitto/config  # your mosquitto.conf here
-      - ./backend/mosquitto/data:/mosquitto/data      # persistent message store
-      - ./backend/mosquitto/log:/mosquitto/log        # broker logs
     networks:
-      - backend
+      - frontend
+      - backend # TODO: this should be removed once Kong works
+      - default
+
+#  pse-cars-backend-configurator:
+#    build:
+#      context: ./backend/configurator
+#    image: pse-cars/backend/configurator
+#
+#  pse-cars-backend-merch:
+#    build:
+#      context: ./backend/merch
+#    image: pse-cars/backend/merch
+#
+#  pse-cars-backend-iot:
+#    build:
+#      context: ./backend/IoT
+#    image: pse-cars/backend/iot
+#
+#  pse-cars-idp:
+#    image: keycloak/keycloak:26.2
+#
+#  pse-cars-gateway:
+#    image: kong:3.9.0-alpine
+
 
 volumes:
   db-configurator:
@@ -55,5 +51,4 @@ volumes:
 secrets: {} # TODO
 
 networks:
-  backend:
   frontend:

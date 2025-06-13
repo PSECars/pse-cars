@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 const dotenvFile = dotenv.config({path: '../../local.env'})
 if (dotenvFile.error) {
-    console.error("Error loading .env file:", dotenvFile.error)
+    console.info("No .env file found!")
 } else {
     console.info("Successfully loaded local.env file")
 }
@@ -24,6 +24,11 @@ const MQTT_BROKER_URL = process.env.MQTT_BROKER_URL || 'mqtt://localhost:1883'
 const MQTT_USERNAME = process.env.MQTT_USERNAME!
 const MQTT_PASSWORD = process.env.MQTT_PASSWORD!
 const MQTT_TOPIC = process.env.MQTT_TOPIC!
+
+if (!MQTT_USERNAME || !MQTT_PASSWORD || !MQTT_TOPIC) {
+    console.error('MQTT credentials or topic not configured in environment variables');
+    process.exit(1);
+}
 
 const mqttClient = mqtt.connect(MQTT_BROKER_URL, {
     username: MQTT_USERNAME,
