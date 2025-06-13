@@ -23,7 +23,7 @@ async function bootstrap() {
   app.enableShutdownHooks();
 
   // Start HTTP + WebSocket server with dynamic port
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3002;
   await app.listen(port);
   logger.log(`HTTP & WS server listening on http://localhost:${port}`);
   

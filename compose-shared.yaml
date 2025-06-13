@@ -13,6 +13,7 @@ services:
     networks:
       - backend
       - world-drive
+      - car-iot-controller
     healthcheck:
       test: [ "CMD", "sh", "-c", "nc -z localhost 1883" ]
       interval: 10s
@@ -24,3 +25,4 @@ services:
 networks:
   backend:
   world-drive:
+  car-iot-controller:

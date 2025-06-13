@@ -2,7 +2,7 @@
 
 export async function sendMqttEvent(carId: string, action: string, value: boolean) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+    const apiUrl = process.env.NEXT_PUBLIC_IOT_URL || 'http://localhost:3002';
     
     // Format the topic to follow car/{carId}/{action} pattern
     const topic = `car/${carId}/${action}`;

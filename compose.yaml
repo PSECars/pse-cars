@@ -2,7 +2,8 @@
 
 include:
   - ./compose-shared.yaml
-  - ./backend/world-drive/compose.yaml # TODO: Refactoring and using include for other modules
+  - ./backend/world-drive/compose.yaml
+  - ./backend/IoT/compose.yaml
 
 services:
   pse-cars-frontend:
@@ -18,6 +19,7 @@ services:
     environment:
       - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
       - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
+      - NEXT_PUBLIC_IOT_URL=${NEXT_PUBLIC_IOT_URL}
     networks:
       - frontend
       - backend # TODO: this should be removed once Kong works
@@ -32,11 +34,6 @@ services:
 #    build:
 #      context: ./backend/merch
 #    image: pse-cars/backend/merch
-#
-#  pse-cars-backend-iot:
-#    build:
-#      context: ./backend/IoT
-#    image: pse-cars/backend/iot
 #
 #  pse-cars-idp:
 #    image: keycloak/keycloak:26.2
