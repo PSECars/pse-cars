@@ -1,7 +1,7 @@
 ---
 
 include:
-  - ./backend/world-drive/compose.yaml
+  - ./backend/world-drive/compose.yaml # TODO: Refactoring and using include for other modules
 
 services:
   pse-cars-frontend:
@@ -34,6 +34,19 @@ services:
 
   pse-cars-gateway:
     image: kong:3.9.0-alpine
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    restart: unless-stopped
+    ports:
+      - "1883:1883"   # MQTT protocol
+      - "9001:9001"   # MQTT over WebSockets
+    volumes:
+      - ./backend/mosquitto/config:/mosquitto/config  # your mosquitto.conf here
+      - ./backend/mosquitto/data:/mosquitto/data      # persistent message store
+      - ./backend/mosquitto/log:/mosquitto/log        # broker logs
+    networks:
+      - backend
 
 volumes:
   db-configurator:
