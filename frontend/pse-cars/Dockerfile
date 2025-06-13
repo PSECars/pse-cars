@@ -2,11 +2,20 @@ FROM node:22-alpine AS base
 # RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /app
 COPY package*.json ./
+
 FROM base AS builder
+
+# Set ARG for build-time environment variables
+ARG NEXT_PUBLIC_MAPBOX_TOKEN
+ARG NEXT_PUBLIC_WORLD_DRIVE_HOST
+
+# Set ENV from ARG to make them available during build
+ENV NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
+ENV NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
 
 WORKDIR /app
 COPY . .
-RUN npm ci
+RUN npm install
 RUN npm run build
 
 

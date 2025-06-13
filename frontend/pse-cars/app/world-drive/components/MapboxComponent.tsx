@@ -10,10 +10,10 @@ import {Coordinate} from "@/app/world-drive/service/currentPositionApiService";
 
 export interface MapboxComponentProps {
     position: Coordinate
+    mapboxToken: string
 }
 
-const MapboxComponent: FC<MapboxComponentProps> = ({position}) => {
-    const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+const MapboxComponent: FC<MapboxComponentProps> = ({position, mapboxToken}) => {
     const mapRef = useRef<MapRef>(null)
     const [trail, setTrail] = useState<number[][]>([])
     const [trailSince, setTrailSince] = useState<number>(Date.now() - 1000 * 60 * 60) // Default to last hour

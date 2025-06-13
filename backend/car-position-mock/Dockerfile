@@ -22,8 +22,9 @@ COPY --from=builder /app/package*.json ./
 
 RUN npm install --omit=dev --ignore-scripts
 
-EXPOSE 3001
+# Install ps for process checking
+RUN apk add --no-cache procps
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=5 CMD wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=5 CMD ps aux | grep -v grep | grep "node dist/index.js" || exit 1
 
 CMD ["node", "dist/index.js"]

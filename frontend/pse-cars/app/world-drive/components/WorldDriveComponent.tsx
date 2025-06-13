@@ -4,7 +4,11 @@ import currentPositionApiService, {Coordinate} from "@/app/world-drive/service/c
 import WeatherComponent from "@/app/world-drive/components/WeatherComponent";
 import MapboxComponent from "@/app/world-drive/components/MapboxComponent";
 
-export default function WorldDriveComponent() {
+interface WorldDriveComponentProps {
+    mapboxToken: string
+}
+
+export default function WorldDriveComponent({mapboxToken}: WorldDriveComponentProps) {
     const [position, setPosition] = useState<Coordinate>({latitude: 48.8603192, longitude: 9.1780495})
 
     useEffect(() => {
@@ -15,7 +19,7 @@ export default function WorldDriveComponent() {
 
     return (
         <>
-            <MapboxComponent position={position}/>
+            <MapboxComponent position={position} mapboxToken={mapboxToken}/>
             <WeatherComponent position={position}/>
         </>
     )
