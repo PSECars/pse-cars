@@ -4,16 +4,18 @@ The PSE Cars project implements a microservices architecture with a single page 
 The architecture is depicted in the following diagram:
 
 ![architecture-diagram](./assets/architecture-overview.png)
-To edit the architecture diagram, you can head to [Excalidraw](https://excalidraw.com/#json=qPRa5HvHtLyFhRTxlwJNO,ogKITKNQVfp70Fm-Bc6Fmg).
+To edit the architecture diagram, you can head to [Excalidraw](https://excalidraw.com/#json=UMViqL7yGEP9J_MtTu8xY,yi9mrHiOdnFlpbi4ghgdUw).
 
 The PSE Cars project consists of the following components:
-- Frontend - SPA using the React framework
+- Frontend - MPA using the Next.js framework
 - API Gateway (Kong) serving as a reverse proxy for the backend services and handling authentication-related tasks
 - Identity Provider (Keycloak) working together with the API Gateway
-- Webserver (Apache httpd) serving the frontend application
 - Configurator Service (implemented with Spring) providing data for the `Cars Overview` and `Car Configurator` pages
-  - PostgreSQL database to persist the configurated cars
+  - PostgreSQL database to persist the configured cars
 - WorldDrive Service (implemented in NodeJS) providing data for the `WorldDrive` page
+  - InfluxDB database to persist the past positions of the car
+  - Mosquitto MQTT broker for communication with the (mocked) car
 - Merch Service (implemented with Spring) providing data for the `Merchandise` page
-  - MongoDB database to serve the merchandise data
+  - PostgreSQL database to serve the merchandise data
 - IoT Service (implemented in Python) serving as a proxy to the Lightbulb for the `MyPSECar` page
+  - Mosquitto MQTT broker for communication with the (mocked) car

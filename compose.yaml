@@ -1,5 +1,8 @@
 ---
 
+include:
+  - ./backend/world-drive/compose.yaml
+
 services:
   pse-cars-frontend:
     build:
@@ -7,16 +10,14 @@ services:
     image: pse-cars/frontend
     ports:
       - "80:3000"
+    environment:
+      - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
+      - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
 
   pse-cars-backend-configurator:
     build:
       context: ./backend/configurator
     image: pse-cars/backend/configurator
-
-  pse-cars-backend-world-drive:
-    build:
-      context: ./backend/word-drive
-    image: pse-cars/backend/world-drive
 
   pse-cars-backend-merch:
     build:
