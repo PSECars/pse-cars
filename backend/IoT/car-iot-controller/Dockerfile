@@ -16,7 +16,7 @@ COPY package*.json ./
 RUN npm ci --production
 
 COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/.env ./.env
+# COPY --from=builder /usr/src/app/.env ./.env
 
 # Create a non-root user to run the application
 RUN addgroup -S appuser && adduser -S -G appuser appuser
