@@ -11,7 +11,7 @@ const WeatherComponent: FC<WeatherComponentProps> = ({position}) => {
     const errorStreak = useRef<number>(0)
 
     useEffect(() => {
-        WeatherApiService.getWeatherAtCurrentPosition().then(async r => {
+        WeatherApiService.getWeatherAt(position).then(async r => {
             setWeather(r)
             errorStreak.current = 0
         }).catch(() => {

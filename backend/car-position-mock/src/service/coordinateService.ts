@@ -1,6 +1,5 @@
 import * as turf from '@turf/turf'
-import {Coordinate} from "../types/Coordinate";
-import coordinateDBService from './coordinateDBService'
+import {Coordinate} from "../types/Coordinate"
 
 /**
  * Observer interface for classes that want to be notified of new GPS coordinates.
@@ -9,7 +8,6 @@ export interface Subscriber {
     notify(coordinate: Coordinate): void
 }
 
-// TODO: move this generator to another microservice and use MQTT to receive the coordinates here
 /**
  * Coordinate Service simulates the generation of GPS coordinates for our vehicle.
  */
@@ -21,11 +19,7 @@ export class CoordinateService {
     private subscribers: Subscriber[] = []
 
     constructor() {
-        coordinateDBService.loadLatestCoordinate().then(latestCoordinate => {
-            if (latestCoordinate) {
-                this.currentCoordinate = latestCoordinate
-            }
-        }).finally(() => this.start())
+        this.start()
     }
 
     /**
@@ -56,7 +50,6 @@ export class CoordinateService {
                 : this.directionInDegrees
 
         this.currentCoordinate = { latitude: newLatitude, longitude: newLongitude }
-        coordinateDBService.saveCoordinate(this.currentCoordinate, Date.now()).then()
 
         this.notifySubscribers()
     }
@@ -75,9 +68,9 @@ export class CoordinateService {
      */
     public static getInstance(): CoordinateService {
         if (!CoordinateService.instance) {
-            CoordinateService.instance = new CoordinateService();
+            CoordinateService.instance = new CoordinateService()
         }
-        return CoordinateService.instance;
+        return CoordinateService.instance
     }
 
     /**
@@ -94,13 +87,6 @@ export class CoordinateService {
      */
     public unsubscribe(subscriber: Subscriber): void {
         this.subscribers = this.subscribers.filter((sub) => sub !== subscriber)
-    }
-
-    /**
-     * Get the coordinates of the current position
-     */
-    public getCurrentPosition() {
-        return this.currentCoordinate
     }
 }
 
