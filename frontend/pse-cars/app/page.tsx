@@ -16,8 +16,16 @@ import MerchPreview from "./assets/merch-preview.webp";
 import {IconSun} from "@tabler/icons-react";
 import TextInput from "@/app/components/TextInput";
 import Logo from "@/app/assets/logo.webp";
+import Link from "next/link";
+import React from "react";
 
 export default function Home() {
+  const ConfiguratorLink = ({children}: {children: React.ReactNode}) => (
+    <Link href="./configurator" >
+      {children}
+    </Link>
+  )
+
   return (
     <div className="overflow-x-hidden">
       <main className="flex flex-col items-center px-10 max-w-400 mx-auto bg-surface-primary">
@@ -27,10 +35,10 @@ export default function Home() {
                 <h1 className="text-5xl text-font-primary text-center font-medium leading-16">THE FUTURE OF DRIVING<br/>STARTS WITH PSECARS</h1>
                 <h4 className={"text-xl text-font-primary text-center font-normal leading-18"}>Where innovation meets elegance.</h4>
                 <div className={"flex flex-row gap-8"}>
+                  <ConfiguratorLink>
+                    <Button>Configure now</Button>
+                  </ConfiguratorLink>
                     <Button onClick={() => {}}>
-                        Configure now
-                    </Button>
-                    <Button variant={"secondary"} onClick={() => {}}>
                         Explore Models
                     </Button>
                 </div>
@@ -53,7 +61,9 @@ export default function Home() {
                     <h2 className={"text-4xl font-medium"}>Make it yours.</h2>
                     <p className={"text-lg font-normal text-font-secondary"}>Customize every detail of your dream car -<br/>
                         from inventory to color.</p>
-                    <Button className={"mx-auto"} onClick={() => {}}>Start Configuring</Button>
+                  <ConfiguratorLink>
+                    <Button className={"mx-auto"}>Start Configuring</Button>
+                  </ConfiguratorLink>
                 </div>
               <Image src={CarView} alt={""} className={"w-full h-auto"} />
           </section>

@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: configurator
+  datasource:
+    url: jdbc:postgresql://localhost:5432/configurator?password=admin
+  data:
+    jdbc:
+      dialect: postgresql
