@@ -1,0 +1,75 @@
+[
+  {
+    "id": 1,
+    "name": "Tempest",
+    "slogan": "Pure Performance",
+    "available": true,
+    "features": [
+      {
+        "id": 0,
+        "name": "Color",
+        "variants": ["#0E0E0E", "#BA0E1B", "#1042B5", "#016C5C", "#557C01", "#A25201"]
+      },
+      {
+        "id": 1,
+        "name": "Rims",
+        "variants": ["#FFFFFF", "#000000"]
+      },
+      {
+        "id": 2,
+        "name": "Glass",
+        "variants": ["#FFFFFF", "#000000", "#5c391d"]
+      }
+    ],
+    "imageUrl": "/cars/Tempest.webp"
+  },
+  {
+    "id": 2,
+    "name": "Emissary",
+    "slogan": "Elegant Power",
+    "available": false,
+    "imageUrl": "/cars/Emissary.webp"
+  },
+  {
+    "id": 3,
+    "name": "Velocity",
+    "slogan": "Redefining Speed",
+    "available": false,
+    "imageUrl": "/cars/Velocity.webp"
+  },
+  {
+    "id": 4,
+    "name": "Apex",
+    "slogan": "Exceptional Luxury",
+    "available": false,
+    "imageUrl": "/cars/Apex.webp"
+  },
+  {
+    "id": 5,
+    "name": "Lucent",
+    "slogan": "Radiant Precision",
+    "available": false,
+    "imageUrl": "/cars/Lucent.webp"
+  },
+  {
+    "id": 6,
+    "name": "Vanta",
+    "slogan": "Absolute Black",
+    "available": false,
+    "imageUrl": "/cars/Vanta.webp"
+  },
+  {
+    "id": 7,
+    "name": "Orion",
+    "slogan": "Cammond the Horizon",
+    "available": false,
+    "imageUrl": "/cars/Orion.webp"
+  },
+  {
+    "id": 8,
+    "name": "Stratos",
+    "slogan": "Ultra Light. Ultra Fast.",
+    "available": false,
+    "imageUrl": "/cars/Stratos.webp"
+  }
+]

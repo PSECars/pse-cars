@@ -66,15 +66,21 @@ const tabs = [
 
 export default function ConfiguratorPage() {
 
-  const initial = parseHash();
-
-  const [color, setColor] = React.useState(initial.color || tabs[0].options[0]);
-  const [detailsColor, setDetailsColor] = React.useState(initial.detailsColor || tabs[1].options[0]);
-  const [glassColor, setGlassColor] = React.useState(initial.glassColor || tabs[2].options[0]);
-  const [activeTab, setActiveTab] = React.useState(tabs[initial.activeTabId || 0]);
+  const [color, setColor] = React.useState(tabs[0].options[0]);
+  const [detailsColor, setDetailsColor] = React.useState(tabs[1].options[0]);
+  const [glassColor, setGlassColor] = React.useState(tabs[2].options[0]);
+  const [activeTab, setActiveTab] = React.useState(tabs[0]);
   tabs[0].setOptionFn = setColor;
   tabs[1].setOptionFn = setDetailsColor;
   tabs[2].setOptionFn = setGlassColor;
+
+  useEffect(() => {
+    const initial = parseHash();
+    if (initial.color) setColor(initial.color);
+    if (initial.detailsColor) setDetailsColor(initial.detailsColor);
+    if (initial.glassColor) setGlassColor(initial.glassColor);
+    if (initial.activeTabId) setActiveTab(tabs[initial.activeTabId]);
+  }, []);
 
   useEffect(() => {
     updateHash({color, detailsColor, glassColor, activeTabId: activeTab.id});

@@ -12,14 +12,17 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
+    "@react-google-maps/api": "2.20.6",
+    "@types/draco3d": "^1.4.10",
+    "draco3d": "^1.5.7",
+    "mapbox-gl": "3.12.0",
     "next": "15.3.0",
+    "openapi-client-axios": "^7.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three": "^0.176.0",
-    "@react-google-maps/api": "2.20.6",
-    "mapbox-gl": "3.12.0",
     "react-map-gl": "8.0.4",
     "socket.io-client": "^4.8.1",
+    "three": "^0.176.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -29,8 +32,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.176.0",
     "@types/react-map-gl": "6.1.7",
+    "@types/three": "^0.176.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
     "tailwindcss": "^4",

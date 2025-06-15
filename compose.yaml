@@ -1,9 +1,10 @@
 ---
 
 include:
-  - ./compose-shared.yaml
-  - ./backend/world-drive/compose.yaml
-  - ./backend/IoT/compose.yaml
+#  - ./compose-shared.yaml
+#  - ./backend/world-drive/compose.yaml
+#  - ./backend/IoT/compose.yaml
+  - ./backend/configurator/compose.yaml
 
 services:
   pse-cars-frontend:
@@ -20,37 +21,21 @@ services:
       - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
       - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
       - NEXT_PUBLIC_IOT_URL=${NEXT_PUBLIC_IOT_URL}
+      - CONFIGURATOR_BACKEND_HOST=${CONFIGURATOR_BACKEND_HOST}
     networks:
       - frontend
       - backend # TODO: this should be removed once Kong works
       - default
 
-  pse-cars-backend-configurator:
-    build:
-      context: ./backend/configurator
-    image: pse-cars/backend/configurator
-
-  pse-cars-db-configurator:
-    image: postgres:17-alpine
-    restart: always
-    volumes:
-      - db-configurator:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: admin
-#      POSTGRES_USER: admin
-#      POSTGRES_HOST_AUTH_METHOD: trust
-
-  pse-cars-backend-world-drive:
-    build:
-      context: ./backend/word-drive
-    image: pse-cars/backend/world-drive
-
-  pse-cars-backend-merch:
-    build:
-      context: ./backend/merch
-    image: pse-cars/backend/merch
+#  pse-cars-backend-world-drive:
+#    build:
+#      context: ./backend/word-drive
+#    image: pse-cars/backend/world-drive
+#
+#  pse-cars-backend-merch:
+#    build:
+#      context: ./backend/merch
+#    image: pse-cars/backend/merch
 
 #  pse-cars-backend-configurator:
 #    build:
@@ -77,3 +62,4 @@ secrets: {} # TODO
 
 networks:
   frontend:
+  backend:

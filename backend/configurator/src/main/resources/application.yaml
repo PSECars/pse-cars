@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: configurator
+  datasource:
+#    url: jdbc:postgresql://localhost:5432/configurator
+    url: ${DATABASE_URL}/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+  data:
+    jdbc:
+      dialect: postgresql
+  jpa:
+    hibernate:
+      ddl-auto: update
