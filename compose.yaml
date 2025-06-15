@@ -1,9 +1,9 @@
 ---
 
 include:
-#  - ./compose-shared.yaml
-#  - ./backend/world-drive/compose.yaml
-#  - ./backend/IoT/compose.yaml
+  - ./compose-shared.yaml
+  - ./backend/world-drive/compose.yaml
+  - ./backend/IoT/compose.yaml
   - ./backend/configurator/compose.yaml
 
 services:
@@ -62,4 +62,3 @@ secrets: {} # TODO
 
 networks:
   frontend:
-  backend:
