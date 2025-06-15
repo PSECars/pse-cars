@@ -115,6 +115,9 @@ export default function CarScene({
       car.add(mesh)
 
       scene.add(car)
+    }, () => {},
+        error => {
+      console.error('Error loading GLTF model:', error);
     })
 
     window.addEventListener('resize', () => {
