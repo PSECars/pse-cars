@@ -5,26 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SavedCar {
+public class ChosenCarFeature {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   String id;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @Column(nullable = true)
-  List<ChosenCarFeature> features;
+  @OneToOne
+  CarFeature feature;
 
-//  String color;
-//  String glassColor;
-//  String rimColor;
-//  String user;
-
+  @Column(nullable = false)
+  String variant;
 }

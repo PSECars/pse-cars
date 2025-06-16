@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "fetch-openapi-types": "npx openapicmd typegen http://localhost:8080/v3/api-docs > app/http-client/openapi.d.ts"
   },
   "engines": {
     "node": ">=22.0.0"

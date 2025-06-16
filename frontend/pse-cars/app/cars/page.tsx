@@ -3,21 +3,22 @@ import Button from "@/app/components/Button";
 import {MakeItYours} from "@/app/components/MakeItYours";
 import Link from "next/link";
 import {openApiClient} from "@/app/http-client/open-api-client";
+import {OfferedCar} from "@/app/http-client/openapi";
 
 // disable pre-rendering because backend is not available at build time -> render & cache at runtime on server-side
 export const dynamic = "force-dynamic";
 
 // cache infinitely (SSR) because this kind of data does not change often
-let offeredCarsCache: object | undefined;
+let offeredCarsCache: OfferedCar[] | undefined;
 
 const getOfferedCars = async () => {
   if (offeredCarsCache) {
     return offeredCarsCache;
   }
 
-  const response = await openApiClient.getOfferedCars();
+  const response = await openApiClient!.getAllOfferedCars();
   offeredCarsCache = response.data;
-  return response.data;
+  return offeredCarsCache!;
 }
 
 export default async function CarsPage() {
@@ -31,7 +32,7 @@ export default async function CarsPage() {
             // @ts-ignore
             offeredCars.map((car) => (
             <div key={car.id} className="relative min-w-[36rem] min-h-[23.59rem] rounded-xl overflow-hidden grow" style={{ aspectRatio: 2780 / 1822}}>
-              <Image src={car.imageUrl} alt={car.name} width={2780} height={1822}
+              <Image src={car.imageUrl!} alt={car.name!} width={2780} height={1822}
                      className="absolute min-full min-full top-0 left-0 inset-0 object-cover"
               />
               <div className="relative flex flex-row justify-between items-end p-4 w-full h-full">
