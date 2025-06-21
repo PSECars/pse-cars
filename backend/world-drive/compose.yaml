@@ -16,7 +16,7 @@ services:
       - "3001:3001"
     networks:
       - world-drive
-      - backend # Network defined in main compose file
+      - backend 
     environment:
       - WORLD_DRIVE_INFLUXDB_URL=${WORLD_DRIVE_INFLUXDB_URL}
       - WORLD_DRIVE_INFLUXDB_ADMIN_TOKEN=${WORLD_DRIVE_INFLUXDB_ADMIN_TOKEN}

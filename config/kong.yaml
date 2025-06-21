@@ -1,0 +1,26 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  - name: world-drive-service
+    url: http://pse-cars-backend-world-drive:3001 
+    routes:
+      - name: world-drive-route
+        paths:
+          - /api/world-drive 
+        strip_path: true
+
+  - name: iot-service
+    url: http://pse-cars-backend-car-iot-controller:3002
+    routes:
+      - name: iot-route
+        paths:
+          - /api/iot
+        strip_path: true
+  
+  - name: frontend-service
+    url: http://pse-cars-frontend:3000 
+    routes:
+      - name: frontend-route
+        paths:
+          - / 
