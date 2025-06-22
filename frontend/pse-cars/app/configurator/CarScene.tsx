@@ -45,7 +45,7 @@ export default function CarScene({
     renderer.setSize(window.innerWidth, canvasHeight)
     // renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setAnimationLoop(animate)
-    containerRef.current.appendChild(renderer.domElement)
+    containerRef.current.replaceChildren(renderer.domElement)
 
     const scene = new THREE.Scene()
 
