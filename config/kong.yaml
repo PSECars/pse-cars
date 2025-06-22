@@ -3,11 +3,11 @@ _transform: true
 
 services:
   - name: world-drive-service
-    url: http://pse-cars-backend-world-drive:3001 
+    url: http://pse-cars-backend-world-drive:3001
     routes:
       - name: world-drive-route
         paths:
-          - /api/world-drive 
+          - /api/world-drive
         strip_path: true
 
   - name: iot-service
@@ -17,10 +17,27 @@ services:
         paths:
           - /api/iot
         strip_path: true
-  
+
+  - name: configurator-service
+    url: http://pse-cars-configurator-backend:8080
+    routes:
+      - name: configurator-route
+        paths:
+          - "/api/configurator/"
+        strip_path: true
+        preserve_host: true
+        plugins:
+          - name: request-transformer
+            config:
+              add:
+                headers:
+                  - "X-Forwarded-Prefix:/api/configurator"
+#                  - "X-Forwarded-Port:80"
+#                  - "X-Forwarded-Host:localhost"
+
   - name: frontend-service
-    url: http://pse-cars-frontend:3000 
+    url: http://pse-cars-frontend:3000
     routes:
       - name: frontend-route
         paths:
-          - / 
+          - /

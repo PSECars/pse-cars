@@ -1,5 +1,5 @@
 import {CarConfigurator} from "@/app/configurator/CarConfigurator";
-import {openApiClient} from "@/app/http-client/open-api-client";
+import {getOpenApiClient} from "@/app/http-client/open-api-client";
 import {OfferedCar} from "@/app/http-client/openapi";
 
 // disable pre-rendering because backend is not available at build time -> render & cache at runtime on server-side
@@ -13,6 +13,7 @@ const getOfferedCar = async () => {
     return offeredCarCache;
   }
 
+  const openApiClient = await getOpenApiClient();
   const response = await openApiClient!.getOfferedCarById({id: 1});
   offeredCarCache = response.data;
   return offeredCarCache!;

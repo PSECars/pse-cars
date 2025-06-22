@@ -4,9 +4,9 @@ import ColorButton from "@/app/configurator/ColorButton";
 import Button from "@/app/components/Button";
 import React, {useEffect, useState} from "react";
 import {CarFeature, SavedCar} from "@/app/http-client/openapi";
-import {openApiClient} from "@/app/http-client/open-api-client";
 import {SaveConfigurationDialog} from "@/app/configurator/SaveConfigurationDialog";
 import {LoadConfigurationDialog} from "@/app/configurator/LoadConfigurationDialog";
+import {deleteSavedCar, getSavedCars, saveCar} from "@/app/actions/configurator";
 
 interface StateFulCarFeature extends CarFeature {
   variant: string;
@@ -52,7 +52,7 @@ export function CarConfigurator({
 
   function saveConfiguration(name: string) {
     console.log('Saving configuration...');
-    openApiClient!.saveCar({}, {
+    saveCar({
       name,
       features: statefulFeatures.map(feature => {
         return {
@@ -62,27 +62,24 @@ export function CarConfigurator({
           variant: feature.variant
         }
       })
-    })
-      .then(result => {
-        console.log("Configuration saved successfully:", result);
-        setSaveConfigDialogOpen(false);
-        savedCars.push(result.data as SavedCar);
-        setSavedCars(savedCars);
-      })
+    }).then(result => {
+      console.log("Configuration saved successfully:", result);
+      setSaveConfigDialogOpen(false);
+      savedCars.push(result as SavedCar);
+      setSavedCars(savedCars);
+    });
   }
 
   const [savedCars, setSavedCars] = useState([] as SavedCar[]);
   useEffect(() => {
-    openApiClient!.getAllSavedCars().then(response => {
-      setSavedCars(response.data as SavedCar[]);
+    getSavedCars().then(response => {
+      setSavedCars(response as SavedCar[]);
     });
   }, []);
 
   function deleteConfiguration(savedCar: SavedCar) {
-    openApiClient!.deleteSavedCar(savedCar.id).then(response => {
-      if (response.status === 204) {
-        setSavedCars(savedCars.filter(car => car.id !== savedCar.id));
-      }
+    deleteSavedCar(savedCar.id!).then(() => {
+      setSavedCars(savedCars.filter(car => car.id !== savedCar.id));
     })
   }
 

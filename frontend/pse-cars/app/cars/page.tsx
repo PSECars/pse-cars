@@ -2,7 +2,7 @@ import Image from "next/image";
 import Button from "@/app/components/Button";
 import {MakeItYours} from "@/app/components/MakeItYours";
 import Link from "next/link";
-import {openApiClient} from "@/app/http-client/open-api-client";
+import {getOpenApiClient} from "@/app/http-client/open-api-client";
 import {OfferedCar} from "@/app/http-client/openapi";
 
 // disable pre-rendering because backend is not available at build time -> render & cache at runtime on server-side
@@ -16,6 +16,7 @@ const getOfferedCars = async () => {
     return offeredCarsCache;
   }
 
+  const openApiClient = await getOpenApiClient();
   const response = await openApiClient!.getAllOfferedCars();
   offeredCarsCache = response.data;
   return offeredCarsCache!;
