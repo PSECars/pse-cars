@@ -12,36 +12,47 @@ services:
       context: ./frontend/pse-cars
       args:
         - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
-        - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
     image: pse-cars/frontend
     container_name: pse-cars-frontend
-    ports:
-      - "80:3000"
     environment:
-      - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
+      - NEXT_PUBLIC_GATEWAY_URL=http://localhost
       - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
       - NEXT_PUBLIC_IOT_URL=${NEXT_PUBLIC_IOT_URL}
       - CONFIGURATOR_BACKEND_HOST=${CONFIGURATOR_BACKEND_HOST}
     networks:
       - frontend
-      - backend # TODO: this should be removed once Kong works
+
+
+  kong:
+    image: kong:3.9.1
+    hostname: kong
+    container_name: kong
+    environment:
+      KONG_DATABASE: "off"
+      KONG_PROXY_ACCESS_LOG: "/dev/stdout"
+      KONG_ADMIN_ACCESS_LOG: "/dev/stdout"
+      KONG_PROXY_ERROR_LOG: "/dev/stderr"
+      KONG_ADMIN_ERROR_LOG: "/dev/stderr"
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
+      KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.yaml"
+    command: "kong start"
+    ports:
+      - "80:8000" # Proxy
+      - "443:8443" # Proxy SSL
+      - "8001:8001" # Admin API
+      - "8444:8444" # Admin API SSL
+    volumes:
+      - ./config:/opt/kong
+    networks:
+      - frontend
+      - backend
       - default
 
-#  pse-cars-backend-configurator:
-#    build:
-#      context: ./backend/configurator
-#    image: pse-cars/backend/configurator
-#
 #  pse-cars-backend-merch:
 #    build:
 #      context: ./backend/merch
 #    image: pse-cars/backend/merch
-#
-#  pse-cars-idp:
-#    image: keycloak/keycloak:26.2
-#
-#  pse-cars-gateway:
-#    image: kong:3.9.0-alpine
+
 
 
 volumes:
@@ -52,3 +63,4 @@ secrets: {} # TODO
 
 networks:
   frontend:
+  backend:
