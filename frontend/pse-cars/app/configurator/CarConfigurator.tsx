@@ -3,7 +3,10 @@ import CarScene from "@/app/configurator/CarScene";
 import ColorButton from "@/app/configurator/ColorButton";
 import Button from "@/app/components/Button";
 import React, {useEffect, useState} from "react";
-import {CarFeature} from "@/app/http-client/openapi";
+import {CarFeature, SavedCar} from "@/app/http-client/openapi";
+import {openApiClient} from "@/app/http-client/open-api-client";
+import {SaveConfigurationDialog} from "@/app/configurator/SaveConfigurationDialog";
+import {LoadConfigurationDialog} from "@/app/configurator/LoadConfigurationDialog";
 
 interface StateFulCarFeature extends CarFeature {
   variant: string;
@@ -11,8 +14,8 @@ interface StateFulCarFeature extends CarFeature {
 }
 
 export function CarConfigurator({
-  features,
-}: {
+                                  features,
+                                }: {
   features: CarFeature[]
 }) {
   const statefulFeatures = features.map(feature => {
@@ -24,6 +27,8 @@ export function CarConfigurator({
     return feature;
   }) as StateFulCarFeature[];
   const [activeTab, setActiveTab] = React.useState(statefulFeatures[0]);
+  const [saveConfigDialogOpen, setSaveConfigDialogOpen] = useState(false);
+  const [loadConfigDialogOpen, setLoadConfigDialogOpen] = useState(false);
 
   useEffect(() => {
     const hash = window.location.hash.slice(1); // remove '#'
@@ -45,51 +50,81 @@ export function CarConfigurator({
     window.location.hash = params.toString();
   }, [...statefulFeatures.map(feature => feature.variant), activeTab]);
 
-  const saveConfiguration = () => {
-    // openApiClient!.saveCar({}, {
-    //   features: [{
-    //     feature: {
-    //       id: 0,
-    //     },
-    //     variant: color
-    //   }, {
-    //     feature: {
-    //       id: 1,
-    //     },
-    //     variant: detailsColor
-    //   }, {
-    //     feature: {
-    //       id: 2,
-    //     },
-    //     variant: glassColor
-    //   }]
-    // })
-    //   .then(result => {
-    //     console.log("Configuration saved successfully:", result);
-    //   })
-  };
+  function saveConfiguration(name: string) {
+    console.log('Saving configuration...');
+    openApiClient!.saveCar({}, {
+      name,
+      features: statefulFeatures.map(feature => {
+        return {
+          feature: {
+            id: feature.id
+          },
+          variant: feature.variant
+        }
+      })
+    })
+      .then(result => {
+        console.log("Configuration saved successfully:", result);
+        setSaveConfigDialogOpen(false);
+        savedCars.push(result.data as SavedCar);
+        setSavedCars(savedCars);
+      })
+  }
+
+  const [savedCars, setSavedCars] = useState([] as SavedCar[]);
+  useEffect(() => {
+    openApiClient!.getAllSavedCars().then(response => {
+      setSavedCars(response.data as SavedCar[]);
+    });
+  }, []);
+
+  function deleteConfiguration(savedCar: SavedCar) {
+    openApiClient!.deleteSavedCar(savedCar.id).then(response => {
+      if (response.status === 204) {
+        setSavedCars(savedCars.filter(car => car.id !== savedCar.id));
+      }
+    })
+  }
+
+  function loadConfiguration(savedCar: SavedCar) {
+    console.log('Loading configuration:', savedCar);
+    for (let feature of statefulFeatures) {
+      const loadedFeature = savedCar.features!.find(element => element.feature!.id === feature.id);
+      feature.setVariant(loadedFeature!.variant!);
+    }
+    setLoadConfigDialogOpen(false);
+  }
+
   return (
     <>
       <div className={"flex flex-row gap-2 border-b-2 border-b-font-tertiary"}>
-        { statefulFeatures.map((feature) => (
+        {statefulFeatures.map((feature) => (
           <button
             key={feature.id}
-            className={`${activeTab.id === feature.id ? "border-b-2": ""} border-b-white`}
+            className={`${activeTab.id === feature.id ? "border-b-2" : ""} border-b-white`}
             onClick={() => setActiveTab(feature)}
           >
             {feature.name}
           </button>
         ))}
       </div>
-      <CarScene color={statefulFeatures[0].variant} detailsColor={statefulFeatures[1].variant} glassColor={statefulFeatures[2].variant} />
+      <CarScene color={statefulFeatures[0].variant} detailsColor={statefulFeatures[1].variant}
+                glassColor={statefulFeatures[2].variant}/>
       <div className={"flex flex-row gap-2"}>
-        { activeTab.variants!.map((variant) => (
+        {activeTab.variants!.map((variant) => (
           <ColorButton color={variant} onClick={() => activeTab.setVariant(variant)} key={variant}/>
         ))}
       </div>
       <div className={"flex-row flex gap-8"}>
-        <Button>Share with Dealer</Button>
-        <Button onClick={saveConfiguration}>Save Configuration</Button>
+        <Button onClick={() => setLoadConfigDialogOpen(true)}>Load Configuration</Button>
+        <Button onClick={() => setSaveConfigDialogOpen(true)}>Save Configuration</Button>
+        <SaveConfigurationDialog
+          open={saveConfigDialogOpen}
+          setOpen={setSaveConfigDialogOpen}
+          saveConfigurationCallback={saveConfiguration}
+        />
+        <LoadConfigurationDialog open={loadConfigDialogOpen} setOpen={setLoadConfigDialogOpen}
+                                 loadConfigurationCallback={loadConfiguration} savedCars={savedCars} deleteConfigurationCallback={deleteConfiguration}/>
       </div>
     </>
   );

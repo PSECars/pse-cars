@@ -28,11 +28,24 @@ declare namespace Components {
         }
         export interface SavedCar {
             id?: string;
+            name?: string;
             features?: ChosenCarFeature[];
         }
     }
 }
 declare namespace Paths {
+    namespace DeleteSavedCar {
+        namespace Parameters {
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        namespace Responses {
+            export interface $200 {
+            }
+        }
+    }
     namespace GetOfferedCarById {
         namespace Parameters {
             export type Id = number; // int32
@@ -80,6 +93,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<any>
+  /**
+   * deleteSavedCar
+   */
+  'deleteSavedCar'(
+    parameters?: Parameters<Paths.DeleteSavedCar.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteSavedCar.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -120,6 +141,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<any>
+  }
+  ['/saved-cars/{id}']: {
+    /**
+     * deleteSavedCar
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteSavedCar.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteSavedCar.Responses.$200>
   }
 }
 

@@ -18,13 +18,10 @@ public class SavedCar {
   @GeneratedValue(strategy = GenerationType.UUID)
   String id;
 
+  @Column(nullable = false)
+  String name;
+
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @Column(nullable = true)
   List<ChosenCarFeature> features;
-
-//  String color;
-//  String glassColor;
-//  String rimColor;
-//  String user;
-
 }

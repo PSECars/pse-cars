@@ -16,7 +16,7 @@ public class ChosenCarFeature {
   @GeneratedValue(strategy = GenerationType.UUID)
   String id;
 
-  @OneToOne
+  @ManyToOne
   CarFeature feature;
 
   @Column(nullable = false)
