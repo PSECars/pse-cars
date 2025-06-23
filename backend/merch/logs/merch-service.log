@@ -1,0 +1,42 @@
+2025-06-23 07:59:36.666 [main] INFO  com.psecars.merch.MerchApplication - Starting MerchApplication v1.0.0 using Java 17.0.15 with PID 1 (/app/app.jar started by appuser in /app)
+2025-06-23 07:59:36.695 [main] INFO  com.psecars.merch.MerchApplication - The following 1 profile is active: "prod"
+2025-06-23 07:59:52.465 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23 08:00:03.190 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23 08:00:07.272 [main] INFO  com.psecars.merch.MerchApplication - Started MerchApplication in 33.294 seconds (process running for 35.468)
+2025-06-23 08:00:07.959 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-23 08:00:07.965 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2025-06-23 08:03:06.262 [main] INFO  com.psecars.merch.MerchApplication - Starting MerchApplication v1.0.0 using Java 17.0.15 with PID 1 (/app/app.jar started by appuser in /app)
+2025-06-23 08:03:06.323 [main] INFO  com.psecars.merch.MerchApplication - The following 1 profile is active: "prod"
+2025-06-23 08:03:17.352 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23 08:03:25.828 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23 08:03:28.819 [main] INFO  com.psecars.merch.MerchApplication - Started MerchApplication in 23.993 seconds (process running for 25.324)
+2025-06-23 08:03:29.351 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-23 08:03:29.354 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-06-23 08:42:23.472 [main] INFO  com.psecars.merch.MerchApplication - Starting MerchApplication v1.0.0 using Java 17.0.15 with PID 1 (/app/app.jar started by appuser in /app)
+2025-06-23 08:42:23.477 [main] INFO  com.psecars.merch.MerchApplication - The following 1 profile is active: "prod"
+2025-06-23 08:42:35.995 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23 08:42:44.490 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23 08:42:47.598 [main] INFO  com.psecars.merch.MerchApplication - Started MerchApplication in 26.013 seconds (process running for 27.772)
+2025-06-23 08:42:50.480 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-23 08:42:50.485 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2025-06-23 08:54:33.572 [main] INFO  com.psecars.merch.MerchApplication - Starting MerchApplication v1.0.0 using Java 17.0.15 with PID 1 (/app/app.jar started by appuser in /app)
+2025-06-23 08:54:33.631 [main] INFO  com.psecars.merch.MerchApplication - The following 1 profile is active: "prod"
+2025-06-23 08:54:48.664 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23 08:54:59.946 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23 08:55:03.146 [main] INFO  com.psecars.merch.MerchApplication - Started MerchApplication in 31.978 seconds (process running for 33.931)
+2025-06-23 08:55:05.145 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-23 08:55:05.147 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-06-23 10:03:21.558 [main] INFO  com.psecars.merch.MerchApplication - Starting MerchApplication v1.0.0 using Java 17.0.15 with PID 1 (/app/app.jar started by appuser in /app)
+2025-06-23 10:03:21.615 [main] INFO  com.psecars.merch.MerchApplication - The following 1 profile is active: "prod"
+2025-06-23 10:03:35.848 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23 10:03:44.832 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23 10:03:48.126 [main] INFO  com.psecars.merch.MerchApplication - Started MerchApplication in 28.465 seconds (process running for 30.092)
+2025-06-23 10:03:48.918 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-23 10:03:48.923 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2025-06-23 10:22:11.842 [main] INFO  com.psecars.merch.MerchApplication - Starting MerchApplication v1.0.0 using Java 17.0.15 with PID 1 (/app/app.jar started by appuser in /app)
+2025-06-23 10:22:11.846 [main] INFO  com.psecars.merch.MerchApplication - The following 1 profile is active: "prod"
+2025-06-23 10:22:26.419 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23 10:22:37.333 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23 10:22:40.952 [main] INFO  com.psecars.merch.MerchApplication - Started MerchApplication in 31.204 seconds (process running for 32.675)
+2025-06-23 10:22:44.045 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-23 10:22:44.048 [http-nio-8083-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms

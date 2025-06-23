@@ -1,0 +1,311 @@
+diff --git a/.gitignore b/.gitignore
+index 7ae5a66..5adf411 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,4 +1,5 @@
+ /.idea/
++/.vscode/
+ /pse-cars.iml
+ 
+ **/node_modules
+diff --git a/backend/merch/Dockerfile b/backend/merch/Dockerfile
+index e69de29..ced1952 100644
+--- a/backend/merch/Dockerfile
++++ b/backend/merch/Dockerfile
+@@ -0,0 +1,72 @@
++#FROM eclipse-temurin:17-jre-alpine
++#RUN apk add --no-cache curl
++#WORKDIR /app
++#COPY target/*.jar app.jar
++#EXPOSE 8083
++#HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
++ #   CMD curl -f http://localhost:8083/merch/actuator/health || exit 1
++#ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-XX:+UseG1GC", "-jar", "app.jar"]
++
++
++# Multi-stage build for PSE Cars Merchandise Service
++FROM eclipse-temurin:17-jdk-alpine AS builder
++
++# Install Maven
++RUN apk add --no-cache maven
++
++# Set working directory
++WORKDIR /app
++
++# Copy Maven files first (for better layer caching)
++COPY pom.xml .
++COPY .mvn/ .mvn/
++COPY mvnw .
++COPY mvnw.cmd .
++
++# Make mvnw executable
++RUN chmod +x mvnw
++
++# Download dependencies (this layer will be cached unless pom.xml changes)
++RUN ./mvnw dependency:go-offline -B
++
++# Copy source code
++COPY src/ src/
++
++# Build the application (skip tests for faster build)
++RUN ./mvnw clean package -DskipTests -B
++
++# Runtime stage
++FROM eclipse-temurin:17-jre-alpine
++
++# Add curl for health checks
++RUN apk add --no-cache curl
++
++# Create app user for security
++RUN addgroup -g 1001 -S appgroup && \
++    adduser -u 1001 -S appuser -G appgroup
++
++# Set working directory
++WORKDIR /app
++
++# Copy the built JAR from builder stage
++COPY --from=builder /app/target/*.jar app.jar
++
++# Create logs directory and set permissions
++RUN mkdir -p /app/logs && \
++    chown -R appuser:appgroup /app
++
++# Switch to non-root user
++USER appuser
++
++# Expose port
++EXPOSE 8083
++
++# Health check
++HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
++    CMD curl -f http://localhost:8083/merch/actuator/health || exit 1
++
++# Set JVM options as environment variable
++ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:G1HeapRegionSize=16m -Djava.security.egd=file:/dev/./urandom"
++
++# Run the application
++ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+diff --git a/frontend/pse-cars/app/globals.css b/frontend/pse-cars/app/globals.css
+index 1e8c94c..639ecd6 100644
+--- a/frontend/pse-cars/app/globals.css
++++ b/frontend/pse-cars/app/globals.css
+@@ -29,3 +29,20 @@
+ 
+ body {
+ }
++
++/* Merchandise line-clamp utilities */
++.line-clamp-2 {
++  display: -webkit-box;
++  -webkit-line-clamp: 2;
++  line-clamp: 2;
++  -webkit-box-orient: vertical;
++  overflow: hidden;
++}
++
++.line-clamp-3 {
++  display: -webkit-box;
++  -webkit-line-clamp: 3;
++  line-clamp: 3;
++  -webkit-box-orient: vertical;
++  overflow: hidden;
++}
+\ No newline at end of file
+diff --git a/frontend/pse-cars/app/layout.tsx b/frontend/pse-cars/app/layout.tsx
+index 6cbf4a3..5981ff9 100644
+--- a/frontend/pse-cars/app/layout.tsx
++++ b/frontend/pse-cars/app/layout.tsx
+@@ -1,8 +1,13 @@
++"use client";
++
+ import type { Metadata } from "next";
+ import {Figtree} from "next/font/google";
+ import "./globals.css";
+ import {IconShoppingBag} from "@tabler/icons-react";
+ import Image from "next/image";
++import { useState } from "react";
++import { useCart } from "@/hooks/useCart";
++import CartSidebar from "@/components/merchandise/CartSidebar";
+ 
+ import Logo from "./assets/logo.webp"
+ import Link from "next/link";
+@@ -10,16 +15,18 @@ import Link from "next/link";
+ // If loading a variable font, you don't need to specify the font weight
+ const figtree = Figtree({ subsets: ['latin'] })
+ 
+-export const metadata: Metadata = {
+-  title: "PSE Cars",
+-  description: "Official PSE Cars website",
+-};
++// Note: Metadata export moved to a separate file since this is now a client component
++// Create app/metadata.ts with the metadata export if needed
+ 
+ export default function RootLayout({
+   children,
+ }: Readonly<{
+   children: React.ReactNode;
+ }>) {
++  // Cart functionality
++  const { getCartItemCount } = useCart();
++  const [cartOpen, setCartOpen] = useState(false);
++
+   return (
+     <html lang="en">
+       <body
+@@ -36,13 +43,27 @@ export default function RootLayout({
+                 <a href="/merchandise" className="hover:text-font-secondary">Merchandise</a>
+                 <a href="/my-pse-car" className="hover:text-font-secondary">MyPSECar</a>
+                 </nav>
+-                <IconShoppingBag className={"text-font-secondary"} />
++                {/* Updated shopping bag icon with cart functionality */}
++                <button
++                  onClick={() => setCartOpen(true)}
++                  className="relative text-font-secondary hover:text-font-primary transition-colors"
++                >
++                  <IconShoppingBag />
++                  {getCartItemCount() > 0 && (
++                    <span className="absolute -top-2 -right-2 bg-font-primary text-surface-primary text-xs rounded-full h-5 w-5 flex items-center justify-center">
++                      {getCartItemCount()}
++                    </span>
++                  )}
++                </button>
+             </div>
+         </div>
+       <main>
+         {children}
+       </main>
++      
++      {/* Cart sidebar */}
++      <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
+       </body>
+     </html>
+   );
+-}
++}
+\ No newline at end of file
+diff --git a/frontend/pse-cars/next.config.ts b/frontend/pse-cars/next.config.ts
+index 714c178..8987ccf 100644
+--- a/frontend/pse-cars/next.config.ts
++++ b/frontend/pse-cars/next.config.ts
+@@ -1,13 +1,59 @@
+ import type { NextConfig } from "next";
+ 
+ const nextConfig: NextConfig = {
+-    // ignore ts errors
++    // ignore ts errors during build
+     typescript: {
+         ignoreBuildErrors: true,
+     },
+     eslint: {
+         ignoreDuringBuilds: true,
+-    }
++    },
++    
++    // Configure external images
++    images: {
++        remotePatterns: [
++            {
++                protocol: 'https',
++                hostname: 'images.unsplash.com',
++                pathname: '/**',
++            },
++            {
++                protocol: 'https',
++                hostname: '*.unsplash.com',
++                pathname: '/**',
++            },
++        ],
++        // Add image optimization settings
++        formats: ['image/webp', 'image/avif'],
++        minimumCacheTTL: 60,
++        dangerouslyAllowSVG: true,
++        contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
++    },
++    
++    // Add API proxy for development to handle CORS better (optional)
++    async rewrites() {
++        return [
++            {
++                source: '/api/merch/:path*',
++                destination: 'http://localhost:8083/merch/api/:path*',
++            },
++        ];
++    },
++    
++    // Alternative: Add headers for CORS (if not using proxy)
++    async headers() {
++        return [
++            {
++                source: '/api/:path*',
++                headers: [
++                    { key: 'Access-Control-Allow-Credentials', value: 'true' },
++                    { key: 'Access-Control-Allow-Origin', value: 'http://localhost:3000' },
++                    { key: 'Access-Control-Allow-Methods', value: 'GET,DELETE,PATCH,POST,PUT,OPTIONS' },
++                    { key: 'Access-Control-Allow-Headers', value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version' },
++                ],
++            },
++        ];
++    },
+ };
+ 
+-export default nextConfig;
++export default nextConfig;
+\ No newline at end of file
+diff --git a/frontend/pse-cars/package-lock.json b/frontend/pse-cars/package-lock.json
+index d0b97cd..7bb9171 100644
+--- a/frontend/pse-cars/package-lock.json
++++ b/frontend/pse-cars/package-lock.json
+@@ -19,7 +19,7 @@
+       },
+       "devDependencies": {
+         "@eslint/eslintrc": "^3",
+-        "@tabler/icons-react": "^3.31.0",
++        "@tabler/icons-react": "^3.34.0",
+         "@tailwindcss/postcss": "^4",
+         "@types/node": "^20",
+         "@types/react": "^19",
+@@ -955,22 +955,24 @@
+       }
+     },
+     "node_modules/@tabler/icons": {
+-      "version": "3.31.0",
+-      "resolved": "https://registry.npmjs.org/@tabler/icons/-/icons-3.31.0.tgz",
+-      "integrity": "sha512-dblAdeKY3+GA1U+Q9eziZ0ooVlZMHsE8dqP0RkwvRtEsAULoKOYaCUOcJ4oW1DjWegdxk++UAt2SlQVnmeHv+g==",
++      "version": "3.34.0",
++      "resolved": "https://registry.npmjs.org/@tabler/icons/-/icons-3.34.0.tgz",
++      "integrity": "sha512-jtVqv0JC1WU2TTEBN32D9+R6mc1iEBuPwLnBsWaR02SIEciu9aq5806AWkCHuObhQ4ERhhXErLEK7Fs+tEZxiA==",
+       "dev": true,
++      "license": "MIT",
+       "funding": {
+         "type": "github",
+         "url": "https://github.com/sponsors/codecalm"
+       }
+     },
+     "node_modules/@tabler/icons-react": {
+-      "version": "3.31.0",
+-      "resolved": "https://registry.npmjs.org/@tabler/icons-react/-/icons-react-3.31.0.tgz",
+-      "integrity": "sha512-2rrCM5y/VnaVKnORpDdAua9SEGuJKVqPtWxeQ/vUVsgaUx30LDgBZph7/lterXxDY1IKR6NO//HDhWiifXTi3w==",
++      "version": "3.34.0",
++      "resolved": "https://registry.npmjs.org/@tabler/icons-react/-/icons-react-3.34.0.tgz",
++      "integrity": "sha512-OpEIR2iZsIXECtAIMbn1zfKfQ3zKJjXyIZlkgOGUL9UkMCFycEiF2Y8AVfEQsyre/3FnBdlWJvGr0NU47n2TbQ==",
+       "dev": true,
++      "license": "MIT",
+       "dependencies": {
+-        "@tabler/icons": "3.31.0"
++        "@tabler/icons": "3.34.0"
+       },
+       "funding": {
+         "type": "github",
+diff --git a/frontend/pse-cars/package.json b/frontend/pse-cars/package.json
+index 8e06cf9..68a0ed1 100644
+--- a/frontend/pse-cars/package.json
++++ b/frontend/pse-cars/package.json
+@@ -20,7 +20,7 @@
+   },
+   "devDependencies": {
+     "@eslint/eslintrc": "^3",
+-    "@tabler/icons-react": "^3.31.0",
++    "@tabler/icons-react": "^3.34.0",
+     "@tailwindcss/postcss": "^4",
+     "@types/node": "^20",
+     "@types/react": "^19",

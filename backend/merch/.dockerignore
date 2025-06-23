@@ -1,0 +1,62 @@
+# Docker ignore file for PSE Cars Merchandise Service
+
+# Target directory (build artifacts)
+target/
+!target/*.jar
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+logs/
+*.log
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Documentation
+README.md
+*.md
+
+# Scripts
+*.sh
+
+# Environment files
+.env
+.env.local
+
+# Test files
+src/test/
+
+# Maven wrapper (we install Maven in container)
+# Comment out if you want to use the wrapper
+# .mvn/
+# mvnw
+# mvnw.cmd
+
+# Temporary files
+tmp/
+temp/
+
+# Node modules (if any)
+node_modules/
+
+# Coverage reports
+coverage/
+
+# Database files
+*.db
+*.sqlite

@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tabler/icons-react": "^3.31.0",
+    "@tabler/icons-react": "^3.34.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

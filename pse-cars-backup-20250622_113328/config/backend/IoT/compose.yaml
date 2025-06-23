@@ -1,0 +1,22 @@
+include:
+  - ../../compose-shared.yaml
+
+services:
+  car-iot-controller:
+    build:
+      context: ./car-iot-controller
+    image: pse-cars/backend/car-iot-controller
+    container_name: pse-cars-backend-car-iot-controller
+    depends_on:
+      mosquitto: # MQTT service is defined in the shared compose file, since it's used by multiple modules
+        condition: service_healthy
+    ports:
+      - "3002:3002"
+    networks:
+      - car-iot-controller
+      - backend # Network defined in main compose file
+    environment:
+      - MQTT_BROKER_URL=${MQTT_BROKER_URL}
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - LOG_LEVEL=${LOG_LEVEL}

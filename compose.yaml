@@ -5,6 +5,7 @@ include:
   - ./backend/world-drive/compose.yaml
   - ./backend/IoT/compose.yaml
   - ./backend/configurator/compose.yaml
+  - ./backend/merch/compose.yaml
 
 services:
   pse-cars-frontend:
@@ -14,6 +15,8 @@ services:
         - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
         - NEXT_PUBLIC_IOT_URL=http://kong:8000/api/iot
         - NEXT_PUBLIC_SOCKET_URL=http://localhost:3002
+        - NEXT_PUBLIC_WORLD_DRIVE_HOST=${NEXT_PUBLIC_WORLD_DRIVE_HOST}
+        - NEXT_PUBLIC_MERCH_URL=${NEXT_PUBLIC_MERCH_URL}
     image: pse-cars/frontend
     container_name: pse-cars-frontend
     environment:
@@ -23,9 +26,13 @@ services:
       - NEXT_PUBLIC_CONFIGURATOR_BACKEND_HOST=${NEXT_PUBLIC_CONFIGURATOR_BACKEND_HOST}
       - NEXT_PUBLIC_IOT_URL=http://kong:8000/api/iot
       - NEXT_PUBLIC_SOCKET_URL=http://localhost:3002
+      - NEXT_PUBLIC_MERCH_URL=${NEXT_PUBLIC_MERCH_URL}
+    depends_on:
+      - merch-service
     networks:
       - frontend
       - backend
+      - merch-network
 
 
   kong:

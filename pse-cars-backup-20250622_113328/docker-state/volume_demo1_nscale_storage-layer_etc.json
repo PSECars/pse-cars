@@ -1,0 +1,15 @@
+[
+    {
+        "CreatedAt": "2024-10-22T14:16:28Z",
+        "Driver": "local",
+        "Labels": {
+            "com.docker.compose.project": "demo1_nscale",
+            "com.docker.compose.version": "2.29.2",
+            "com.docker.compose.volume": "storage-layer_etc"
+        },
+        "Mountpoint": "/var/lib/docker/volumes/demo1_nscale_storage-layer_etc/_data",
+        "Name": "demo1_nscale_storage-layer_etc",
+        "Options": null,
+        "Scope": "local"
+    }
+]

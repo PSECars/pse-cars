@@ -1,0 +1,13 @@
+[
+    {
+        "CreatedAt": "2024-11-21T08:27:44Z",
+        "Driver": "local",
+        "Labels": {
+            "com.docker.volume.anonymous": ""
+        },
+        "Mountpoint": "/var/lib/docker/volumes/71e82f3de229459e2e2a5106c7c66e5da7499595cf52aba9e1f5328f91103e65/_data",
+        "Name": "71e82f3de229459e2e2a5106c7c66e5da7499595cf52aba9e1f5328f91103e65",
+        "Options": null,
+        "Scope": "local"
+    }
+]

@@ -1,0 +1,5 @@
+NETWORK ID     NAME                  DRIVER    SCOPE
+d45484739c4e   bridge                bridge    local
+f75bf7b8fb4f   host                  host      local
+0a99214d80f9   merch_merch-network   bridge    local
+bbe5a634ed82   none                  null      local
