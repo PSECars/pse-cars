@@ -8,8 +8,6 @@ services:
       DATABASE_NAME: ${CONFIGURATOR_POSTGRES_DB}
       DATABASE_USER: ${CONFIGURATOR_POSTGRES_USER}
       DATABASE_PASSWORD: ${CONFIGURATOR_POSTGRES_PASSWORD}
-    ports:
-      - "8080:8080"
 
   pse-cars-configurator-db:
     image: postgres:17-alpine
