@@ -21,15 +21,10 @@ export function LoadConfigurationDialog({
       <List sx={{pt: 0}}>
         {savedCars.map((savedCar) => (
           <ListItem disablePadding key={savedCar.id}>
-            <ListItemButton onClick={() => loadConfigurationCallback(savedCar)}>
-              {/*<ListItemAvatar>*/}
-              {/*  <Avatar>*/}
-              {/*    Test*/}
-              {/*  </Avatar>*/}
-              {/*</ListItemAvatar>*/}
+            <ListItemButton onClick={() => loadConfigurationCallback(savedCar)} className="hover:bg-gray-900">
               <ListItemText primary={savedCar.name}/>
             </ListItemButton>
-            <Button className="bg-red-600 m-2" size="small" onClick={() => deleteConfigurationCallback(savedCar)}>X</Button>
+            <Button className="bg-red-600 m-2 hover:bg-red-800" size="small" onClick={() => deleteConfigurationCallback(savedCar)}>X</Button>
           </ListItem>
         ))}
       </List>

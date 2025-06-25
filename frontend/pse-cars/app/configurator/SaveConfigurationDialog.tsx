@@ -19,6 +19,13 @@ export function SaveConfigurationDialog({
     }
   }, [open]);
 
+  function onSave() {
+    if (name.length <= 1) {
+      return;
+    }
+    saveConfigurationCallback(name);
+  }
+
   return (
     <Dialog
       open={open}
@@ -47,8 +54,8 @@ export function SaveConfigurationDialog({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
-        <Button onClick={() => saveConfigurationCallback(name)}>Save</Button>
+        <Button onClick={() => setOpen(false)} className="bg-gray-800 hover:bg-gray-900">Cancel</Button>
+        <Button onClick={onSave} className="bg-green-700 hover:bg-green-800">Save</Button>
       </DialogActions>
     </Dialog>
   );
