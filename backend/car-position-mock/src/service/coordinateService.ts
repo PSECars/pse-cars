@@ -36,7 +36,7 @@ export class CoordinateService {
      * Generate the next GPS coordinate using turf.js.
      */
     private generateNextCoordinate(): void {
-        const distanceInKm = 10
+        const distanceInKm = 1
         const point = turf.point([this.currentCoordinate.longitude, this.currentCoordinate.latitude])
         const destination = turf.destination(point, distanceInKm, this.directionInDegrees, { units: 'kilometers' })
 

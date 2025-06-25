@@ -118,8 +118,26 @@ server.on('upgrade', (request, socket, head) => {
     }
 })
 
-wss.on('connection', (ws: WebSocket) => {
+wss.on('connection', async (ws: WebSocket) => {
     console.log('New WebSocket client connected')
+
+    // Send the latest coordinate to the newly connected client
+    try {
+        const latestCoordinate = await coordinateDBService.loadLatestCoordinate()
+        if (latestCoordinate) {
+            // Convert the database format to the expected Coordinate format
+            const coordinate: Coordinate = {
+                latitude: latestCoordinate.latitude,
+                longitude: latestCoordinate.longitude
+            }
+            ws.send(JSON.stringify({ coordinate }))
+            console.log('Sent latest coordinate to new client:', coordinate)
+        } else {
+            console.log('No coordinates in database to send to new client')
+        }
+    } catch (error) {
+        console.error('Error loading latest coordinate for new client:', error)
+    }
 
     ws.on('close', () => {
         console.log('WebSocket client disconnected')

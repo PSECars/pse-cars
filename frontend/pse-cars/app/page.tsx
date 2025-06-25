@@ -10,7 +10,6 @@ import Card2 from "./assets/card-2.webp";
 import Card3 from "./assets/card-3.webp";
 import Card4 from "./assets/card-4.webp";
 import Card1 from "./assets/card-1.webp";
-import CarView from "./assets/car-view.webp";
 import Map from "./assets/map.webp";
 import App from "./assets/app.webp";
 import MerchPreview from "./assets/merch-preview.webp";
@@ -30,6 +29,18 @@ export default function Home() {
 
   const CarsLink = ({children}: {children: React.ReactNode}) => (
     <Link href="./cars" >
+      {children}
+    </Link>
+  );
+
+  const WorldDriveLink = ({children}: {children: React.ReactNode}) => (
+    <Link href="./world-drive" >
+      {children}
+    </Link>
+  );
+
+  const MyPseCarLink = ({children}: {children: React.ReactNode}) => (
+    <Link href="./my-pse-car" >
       {children}
     </Link>
   );
@@ -76,7 +87,7 @@ export default function Home() {
                         </div>
                     </div>
                     <h2 className={"text-4xl font-medium text-font-primary"}>Follow the global journey of our<br/>legendary prototype - PSECAR0</h2>
-                    <Button className={"mx-auto"} onClick={() => {}}>Track PSCAR0</Button>
+                    <WorldDriveLink><Button className={"mx-auto"}>Track PSCAR0</Button></WorldDriveLink>
                 </div>
           </section>
           <section className={"relative flex flex-col items-center justify-center w-full h-screen mt-16"}>
@@ -87,7 +98,7 @@ export default function Home() {
                             control and full customization</h2>
                         <p className={"text-lg font-light text-font-secondary"}>Everything you need right from your Phone.</p>
                         </div>
-                        <Button className={"mr-auto"} onClick={() => {}}>Open Control Panel</Button>
+                        <MyPseCarLink><Button className={"mr-auto"}>Open Control Panel</Button></MyPseCarLink>
                     </div>
                     <Image src={App} alt={""} className={"w-100 flex-0"} />
               </div>
