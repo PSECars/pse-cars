@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore all .sh files
+*.sh
+
+# Backup files with timestamps
+*.backup.*
+*-backup
+*_backup
+*-bak
+*_bak
+# Ignore all .bak files
+*.bak

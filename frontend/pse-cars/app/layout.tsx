@@ -1,8 +1,12 @@
-import type { Metadata } from "next";
+"use client";
+
 import {Figtree} from "next/font/google";
 import "./globals.css";
 import {IconShoppingBag} from "@tabler/icons-react";
 import Image from "next/image";
+import { useState } from "react";
+import { useCart } from "@/hooks/useCart";
+import CartSidebar from "@/components/merchandise/CartSidebar";
 
 import Logo from "./assets/logo.webp"
 import Link from "next/link";
@@ -10,16 +14,18 @@ import Link from "next/link";
 // If loading a variable font, you don't need to specify the font weight
 const figtree = Figtree({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: "PSE Cars",
-  description: "Official PSE Cars website",
-};
+// Note: Metadata export moved to a separate file since this is now a client component
+// app/metadata.ts created with the metadata export if needed
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Cart functionality
+  const { getCartItemCount } = useCart();
+  const [cartOpen, setCartOpen] = useState(false);
+
   return (
     <html lang="en">
       <body
@@ -36,12 +42,26 @@ export default function RootLayout({
                 <a href="/merchandise" className="hover:text-font-secondary">Merchandise</a>
                 <a href="/my-pse-car" className="hover:text-font-secondary">MyPSECar</a>
                 </nav>
-                <IconShoppingBag className={"text-font-secondary"} />
+                {/* Updated shopping bag icon with cart functionality */}
+                <button
+                  onClick={() => setCartOpen(true)}
+                  className="relative text-font-secondary hover:text-font-primary transition-colors"
+                >
+                  <IconShoppingBag />
+                  {getCartItemCount() > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-font-primary text-surface-primary text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {getCartItemCount()}
+                    </span>
+                  )}
+                </button>
             </div>
         </div>
       <main>
         {children}
       </main>
+      
+      {/* Cart sidebar */}
+      <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
       </body>
     </html>
   );

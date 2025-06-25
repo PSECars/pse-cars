@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import Hero from "./assets/hero.webp";
 import Button from "@/app/components/Button";
@@ -32,6 +33,8 @@ export default function Home() {
       {children}
     </Link>
   );
+
+  const router = useRouter();
 
   return (
     <div className="overflow-x-hidden">
@@ -96,7 +99,7 @@ export default function Home() {
                     <h2 className={"text-4xl font-medium"}>PSE Lifestyle Collection</h2>
                     <p className={"text-lg font-normal text-font-secondary"}>Discover the exclusive PSECar Merchandise.</p>
                     </div>
-                    <Button className={"mx-auto"} onClick={() => {}}>Shop Now</Button>
+                    <Button className={"mx-auto"} onClick={() => router.push('/merchandise')}>Shop Now</Button>
                 </div>
           </section>
           <section className={"flex flex-col w-full py-16 gap-8"}>
