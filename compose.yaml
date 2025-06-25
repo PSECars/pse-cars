@@ -12,7 +12,7 @@ services:
       context: ./frontend/pse-cars
       args:
         - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
-        - NEXT_PUBLIC_IOT_URL=http://car-iot-controller:3002
+        - NEXT_PUBLIC_IOT_URL=http://kong:8000/api/iot
         - NEXT_PUBLIC_SOCKET_URL=http://localhost:3002
     image: pse-cars/frontend
     container_name: pse-cars-frontend
@@ -21,7 +21,7 @@ services:
       - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN}
       - NEXT_PUBLIC_IOT_URL=${NEXT_PUBLIC_IOT_URL}
       - NEXT_PUBLIC_CONFIGURATOR_BACKEND_HOST=${NEXT_PUBLIC_CONFIGURATOR_BACKEND_HOST}
-      - NEXT_PUBLIC_IOT_URL=http://car-iot-controller:3002
+      - NEXT_PUBLIC_IOT_URL=http://kong:8000/api/iot
       - NEXT_PUBLIC_SOCKET_URL=http://localhost:3002
     networks:
       - frontend

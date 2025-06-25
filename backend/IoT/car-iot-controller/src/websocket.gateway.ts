@@ -79,11 +79,6 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         return { success: true, carId };
     }
 
-    // Legacy method for backward compatibility
-    emitStats(stats: { battery: number; range: number; temperature: number; [key: string]: any }) {
-        this.server.emit('carStats', stats);
-    }
-
     // New method for car-specific stats
     emitCarStats(carId: string, stats: { battery: number; range: number; temperature: number; [key: string]: any }) {
         // Get subscribers for this car
