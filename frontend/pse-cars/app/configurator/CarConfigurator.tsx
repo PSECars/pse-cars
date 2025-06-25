@@ -7,6 +7,7 @@ import {CarFeature, SavedCar} from "@/app/http-client/openapi";
 import {SaveConfigurationDialog} from "@/app/configurator/SaveConfigurationDialog";
 import {LoadConfigurationDialog} from "@/app/configurator/LoadConfigurationDialog";
 import {deleteSavedCar, getSavedCars, saveCar} from "@/app/actions/configurator";
+import {PositionUpdater} from "@/app/configurator/PositionUpdater";
 
 interface StateFulCarFeature extends CarFeature {
   variant: string;
@@ -29,6 +30,8 @@ export function CarConfigurator({
   const [activeTab, setActiveTab] = React.useState(statefulFeatures[0]);
   const [saveConfigDialogOpen, setSaveConfigDialogOpen] = useState(false);
   const [loadConfigDialogOpen, setLoadConfigDialogOpen] = useState(false);
+  const [cameraPosition, setCameraPosition] = useState<[number,number,number,boolean]>([-4, 0, 0,true]);
+  const positionUpdater = new PositionUpdater(setCameraPosition, cameraPosition);
 
   useEffect(() => {
     const hash = window.location.hash.slice(1); // remove '#'
@@ -77,6 +80,21 @@ export function CarConfigurator({
     });
   }, []);
 
+  useEffect(() => {
+    if (activeTab.id === 0) {
+      positionUpdater.updatePosition([-4, 2, 0])
+      // setCameraPosition([-4, 2, 0]);
+    }
+    if (activeTab.id === 1) {
+      // setCameraPosition([-4, 0, 0]);
+      positionUpdater.updatePosition([-4, 0, 0]);
+    }
+    if (activeTab.id === 2) {
+      // setCameraPosition([-2, 1.5, -3]);
+      positionUpdater.updatePosition([-2, 1.5, -3]);
+    }
+  }, [activeTab]);
+
   function deleteConfiguration(savedCar: SavedCar) {
     deleteSavedCar(savedCar.id!).then(() => {
       setSavedCars(savedCars.filter(car => car.id !== savedCar.id));
@@ -106,7 +124,7 @@ export function CarConfigurator({
         ))}
       </div>
       <CarScene color={statefulFeatures[0].variant} detailsColor={statefulFeatures[1].variant}
-                glassColor={statefulFeatures[2].variant}/>
+                glassColor={statefulFeatures[2].variant} position={cameraPosition} setPositionState={setCameraPosition}/>
       <div className={"flex flex-row gap-2"}>
         {activeTab.variants!.map((variant) => (
           <ColorButton color={variant} onClick={() => activeTab.setVariant(variant)} key={variant}/>

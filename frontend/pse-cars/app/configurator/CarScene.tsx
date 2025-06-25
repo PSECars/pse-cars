@@ -26,7 +26,11 @@ export default function CarScene({
   color,
   detailsColor,
   glassColor,
+  position,
+  setPositionState,
 }: {
+  position: [number, number, number];
+  setPositionState: (position: [number, number, number, boolean]) => void;
   color: string;
   detailsColor: string;
   glassColor: string;
@@ -35,6 +39,8 @@ export default function CarScene({
   const bodyMaterialRef = useRef<THREE.MeshPhysicalMaterial>(null);
   const detailsMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
   const glassMaterialRef = useRef<THREE.MeshPhysicalMaterial>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera>(null);
+  const controlsRef = useRef<OrbitControls>(null);
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -52,13 +58,21 @@ export default function CarScene({
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / canvasHeight, 0.1, 100);
     renderer.setSize(window.innerWidth, canvasHeight);
     // camera.position.set(4.25, 1.4, -4.5)
-    camera.position.set(-4, 0, 0)
+    camera.position.set(...position)
+    cameraRef.current = camera;
 
     const controls = new OrbitControls(camera, renderer.domElement)
-    controls.maxDistance = 5
-    controls.maxPolarAngle = THREE.MathUtils.degToRad(90)
-    controls.target.set(0, 0.5, 0)
-    controls.update()
+    controls.minDistance = 2;
+    controls.maxDistance = 5;
+    controls.maxPolarAngle = THREE.MathUtils.degToRad(90);
+    controls.target.set(0, 0.5, 0);
+    controls.update();
+    controls.addEventListener('change', () => {
+      if (camera.position.x !== position[0] || camera.position.y !== position[1] || camera.position.z !== position[2]) {
+        setPositionState([camera.position.x, camera.position.y, camera.position.z, false]);
+      }
+    });
+    controlsRef.current = controls;
 
     const wheels: THREE.Object3D[] = []
 
@@ -70,8 +84,6 @@ export default function CarScene({
     const directionalLight = new THREE.DirectionalLight(0xffffff, 10);
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
-
-
 
     const bodyMaterial = new THREE.MeshPhysicalMaterial({color: color, metalness: 1, roughness: 0.5, clearcoat: 1, clearcoatRoughness: 0.03,})
     bodyMaterialRef.current = bodyMaterial;
@@ -159,6 +171,13 @@ export default function CarScene({
       glassMaterialRef.current.color.set(glassColor);
     }
   }, [glassColor]);
+
+  useEffect(() => {
+    if (position[3]) {
+      cameraRef.current?.position.set(...position);
+      controlsRef.current?.update();
+    }
+  }, [position]);
 
   return <div ref={containerRef}
               style={{height: "50vh", width: "100vw"}}
