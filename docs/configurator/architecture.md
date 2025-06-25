@@ -1,5 +1,7 @@
 # Architectural decisions on the configurator
 
+![configurator-diagram.svg](../assets/configurator-diagram.svg)
+
 ## Chosen technologies
 
  - Springboot as the backend does not have specific requirements which would require a different framework or language and it's very well known and thus well extendable and maintainable in the future
