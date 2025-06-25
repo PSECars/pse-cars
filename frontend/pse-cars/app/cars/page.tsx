@@ -41,11 +41,11 @@ export default async function CarsPage() {
                   <span className="text-white text-3xl font-medium">{car.name}</span>
                   <span className="text-white text-lg">{car.slogan}</span>
                 </div>
-                {car.available ? (
+                {/*{car.available ? (*/}
                   <Link href="/configurator"><Button>View Details</Button></Link>
-                ) : (
-                  <Button className="cursor-not-allowed!">View Details</Button>
-                )}
+                {/*) : (*/}
+                {/*  <Button className="cursor-not-allowed!">View Details</Button>*/}
+                {/*)}*/}
               </div>
             </div>
           ))}
