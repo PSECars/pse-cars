@@ -69,18 +69,24 @@ services:
         KEYCLOAK_ADMIN: admin
         KEYCLOAK_ADMIN_PASSWORD: admin
         KC_HTTP_RELATIVE_PATH: "/"
+        KC_HEALTH_ENABLED: "true"
       ports:
-        - "8080:8080" 
+        - "8080:8080"
+        - "9000:9000"
       volumes:
         - ./config/keycloak:/opt/keycloak/data/import
       networks:
         - backend
+      healthcheck:
+        test: [ "CMD", "bash", "-c", "</dev/tcp/localhost/8080" ]
+        start_period: 60s
+        interval: 10s
+        timeout: 5s
+        retries: 5
 
 volumes:
   db-configurator:
     driver: local
-
-secrets: {} # TODO
 
 networks:
   frontend:

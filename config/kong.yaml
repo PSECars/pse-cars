@@ -32,8 +32,6 @@ services:
               add:
                 headers:
                   - "X-Forwarded-Prefix:/api/configurator"
-#                  - "X-Forwarded-Port:80"
-#                  - "X-Forwarded-Host:localhost"
 
   - name: frontend-service
     url: http://pse-cars-frontend:3000
