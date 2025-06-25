@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { CarStatsService } from './car-stats.service';
 
 @WebSocketGateway({
     cors: { origin: '*' },
@@ -15,7 +16,8 @@ import { Logger } from '@nestjs/common';
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private readonly logger = new Logger(WebsocketGateway.name);
     private carSubscriptions = new Map<string, Set<string>>();
-    
+    private carStatsService: CarStatsService;
+
     @WebSocketServer()
     server: Server;
 
@@ -39,11 +41,17 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         });
     }
 
+    setCarStatsService(carStatsService: CarStatsService) {
+        this.carStatsService = carStatsService;
+    }
+
     @SubscribeMessage('subscribeToCar')
     handleSubscribeToCar(client: Socket, carId: string) {
         // Initialize the set if this is the first subscriber for this car
+        let isFirstSubscriber = false;
         if (!this.carSubscriptions.has(carId)) {
             this.carSubscriptions.set(carId, new Set());
+            isFirstSubscriber = true;
         }
         
         // Add this client to the subscribers for this car
@@ -52,6 +60,9 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         if (subscribers) {
             subscribers.add(client.id);
             this.logger.log(`Client ${client.id} subscribed to car ${carId}`);
+            if (isFirstSubscriber && this.carStatsService) {
+                this.carStatsService.ensureEmittingForCar(carId);
+            }
         }
         
         return { success: true, carId };
@@ -66,11 +77,6 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         
         return { success: true, carId };
-    }
-
-    // Legacy method for backward compatibility
-    emitStats(stats: { battery: number; range: number; temperature: number; [key: string]: any }) {
-        this.server.emit('carStats', stats);
     }
 
     // New method for car-specific stats

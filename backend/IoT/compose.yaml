@@ -15,8 +15,10 @@ services:
     networks:
       - car-iot-controller
       - backend # Network defined in main compose file
+      - frontend # Network defined in main compose file
     environment:
       - MQTT_BROKER_URL=${MQTT_BROKER_URL}
       - MQTT_USERNAME=${MQTT_USERNAME}
       - MQTT_PASSWORD=${MQTT_PASSWORD}
       - LOG_LEVEL=${LOG_LEVEL}
+      - WORLD_DRIVE_MQTT_TOPIC=${WORLD_DRIVE_MQTT_TOPIC}
