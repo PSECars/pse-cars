@@ -1,4 +1,0 @@
-* main
-  remotes/origin/HEAD -> origin/main
-  remotes/origin/feat/configurator
-  remotes/origin/main

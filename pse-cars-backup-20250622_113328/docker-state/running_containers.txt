@@ -1,4 +1,0 @@
-NAMES            IMAGE                 STATUS                    PORTS                    NETWORKS
-merch-service    merch-merch-service   Up 13 minutes (healthy)   0.0.0.0:8083->8083/tcp   merch_merch-network
-merch-postgres   postgres:15-alpine    Up 13 minutes (healthy)   0.0.0.0:5432->5432/tcp   merch_merch-network
-merch-redis      redis:7-alpine        Up 13 minutes (healthy)   0.0.0.0:6379->6379/tcp   merch_merch-network
