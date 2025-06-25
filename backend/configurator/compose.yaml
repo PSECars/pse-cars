@@ -16,8 +16,6 @@ services:
     restart: always
     volumes:
       - db-configurator:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_DB: ${CONFIGURATOR_POSTGRES_DB}
       POSTGRES_USER: ${CONFIGURATOR_POSTGRES_USER}
