@@ -75,6 +75,18 @@ export class MqttListenerService implements OnModuleInit, OnModuleDestroy {
                     this.logger.log('Subscribed to car/# topics');
                 }
             });
+
+            // Subscribe to world-drive topic for location updates
+            const worldDriveTopic = process.env.WORLD_DRIVE_MQTT_TOPIC;
+            if (worldDriveTopic) {
+                this.client.subscribe(worldDriveTopic, { qos: 0 }, (err) => {
+                    if (err) {
+                        this.logger.error(`Error subscribing to world-drive topic: ${err.message}`);
+                    } else {
+                        this.logger.log(`Subscribed to world-drive topic: ${worldDriveTopic}`);
+                    }
+                });
+            }
         });
 
         this.client.on('message', (topic, payload) => {
@@ -95,6 +107,28 @@ export class MqttListenerService implements OnModuleInit, OnModuleDestroy {
                     }
                 }
                 
+                // Handle world-drive location topic
+                const worldDriveTopic = process.env.WORLD_DRIVE_MQTT_TOPIC;
+                if (worldDriveTopic && topic === worldDriveTopic) {
+                    // Assume payload: { latitude: number, longitude: number }
+                    let coordinate;
+                    try {
+                        coordinate = JSON.parse(message);
+                    } catch (e) {
+                        this.logger.warn('Invalid JSON for location:', message);
+                        return;
+                    }
+                    // Set location for all known cars
+                    const allCarIds = Array.from(this.carStatsService['carStates'].keys());
+                    if (allCarIds.length === 0) {
+                        this.logger.warn('No cars found to update location');
+                    }
+                    allCarIds.forEach(carId => {
+                        this.carStatsService.updateCarLocation(carId, coordinate);
+                    });
+                    return;
+                }
+
                 // Process message based on topic pattern car/{carId}/...
                 if (topic.startsWith('car/')) {
                     const parts = topic.split('/');

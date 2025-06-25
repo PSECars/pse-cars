@@ -9,6 +9,8 @@ export interface CarState {
     lights: boolean;
     climate: boolean;
     heating: boolean;
+    latitude?: number;
+    longitude?: number;
     [key: string]: any;
 }
 
@@ -16,11 +18,12 @@ export interface CarState {
 export class CarStatsService {
     private readonly logger = new Logger(CarStatsService.name);
     private carStates = new Map<string, CarState>(); 
-    private emitterInterval: NodeJS.Timeout;
+    private carEmitters = new Map<string, NodeJS.Timeout>();
     private lastEmitTime = 0;
 
     constructor(private readonly gateway: WebsocketGateway) {
-        this.startEmitting();
+        // Inject self into gateway for callback
+        this.gateway.setCarStatsService(this);
     }
 
     getHealth() {
@@ -36,19 +39,17 @@ export class CarStatsService {
         return this.getOrCreateCarState(carId);
     }
 
-    private startEmitting() {
-        this.emitterInterval = setInterval(() => {
-            // Update and emit stats for all cars
-            this.carStates.forEach((state, carId) => {
-                this.updateCarMockData(carId);
-                
-                const stats = this.prepareCarStats(carId);
-                
-                this.lastEmitTime = Date.now();
-                this.isDebugMode() && this.logger.debug(`Emitting stats for car ${carId}: ${JSON.stringify(stats)}`);
-                this.gateway.emitCarStats(carId, stats);
-            });
-        }, 1000);
+    // Start emitting stats for a specific car if not already started
+    ensureEmittingForCar(carId: string) {
+        if (this.carEmitters.has(carId)) return;
+        this.carEmitters.set(carId, setInterval(() => {
+            this.updateCarMockData(carId);
+            const stats = this.prepareCarStats(carId);
+            this.lastEmitTime = Date.now();
+            this.isDebugMode() && this.logger.debug(`Emitting stats for car ${carId}: ${JSON.stringify(stats)}`);
+            this.gateway.emitCarStats(carId, stats);
+        }, 1000));
+        this.logger.log(`Started emitting stats for car ${carId}`);
     }
 
     private updateCarMockData(carId: string) {
@@ -56,14 +57,25 @@ export class CarStatsService {
         
         // Drain battery & range
         state.battery -= Math.random();
-        state.range -= Math.random() * 2;
-        // Reset when low
+        state.range = state.battery * 500 / 100; // Assuming 500km range at 100% battery
+            // Reset when low
         if (state.battery <= 5 || state.range <= 10) {
             state.battery = 100;
             state.range = 300;
         }
         // Fluctuate temperature ±0.5°C
         state.temperature += (Math.random() - 0.5);
+    }
+
+    // Add or update car location
+    updateCarLocation(carId: string, coordinate: { latitude: number; longitude: number }) {
+        const state = this.getOrCreateCarState(carId);
+        state.latitude = coordinate.latitude;
+        state.longitude = coordinate.longitude;
+        this.logger.log(`Updated location for car ${carId}: ${coordinate.latitude}, ${coordinate.longitude}`);
+        // Emit updated stats to clients
+        const stats = this.prepareCarStats(carId);
+        this.gateway.emitCarStats(carId, stats);
     }
 
     private prepareCarStats(carId: string): CarState {
@@ -73,6 +85,8 @@ export class CarStatsService {
             battery: Math.round(state.battery),
             range: Math.round(state.range),
             temperature: Math.round(state.temperature * 10) / 10,
+            latitude: state.latitude,
+            longitude: state.longitude,
         };
     }
 

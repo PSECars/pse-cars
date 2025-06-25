@@ -2,7 +2,12 @@
 
 import CarStats from "@/app/my-pse-car/[carId]/car-stats";
 import {IconFlame, IconLock, IconLockOpen, IconPropeller, IconSun} from "@tabler/icons-react";
-import { sendMqttEvent } from "../../actions/mqtt";
+import {
+    setCarLock,
+    setCarLights,
+    setCarClimate,
+    setCarHeating
+} from "../../actions/mqtt";
 import { useState, useEffect } from "react";
 import { io, Socket } from 'socket.io-client';
 import { useParams } from 'next/navigation';
@@ -12,6 +17,8 @@ interface CarState {
     lights?: boolean;
     climate?: boolean;
     heating?: boolean;
+    latitude?: number;
+    longitude?: number;
     [key: string]: any;
 }
 
@@ -32,7 +39,7 @@ export default function MyPseCarPage() {
 
     useEffect(() => {
         if (!socket) {
-            socket = io(process.env.NEXT_PUBLIC_WS_URL as string);
+            socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string);
         }
 
         // Subscribe to this specific car
@@ -40,7 +47,7 @@ export default function MyPseCarPage() {
             console.log('Subscribed to car:', response);
         });
 
-        socket.on('carStats', (data: any) => {
+        socket.on(`car/${carId}/stats`, (data: any) => {
             const newState = { ...carState };
 
             // Update state with values from WebSocket
@@ -48,6 +55,8 @@ export default function MyPseCarPage() {
             if (data.lights !== undefined) newState.lights = data.lights;
             if (data.climate !== undefined) newState.climate = data.climate;
             if (data.heating !== undefined) newState.heating = data.heating;
+            if (data.latitude !== undefined) newState.latitude = data.latitude;
+            if (data.longitude !== undefined) newState.longitude = data.longitude;
 
             setCarState(newState);
 
@@ -57,22 +66,27 @@ export default function MyPseCarPage() {
 
         return () => {
             socket.emit('unsubscribeFromCar', carId);
-            socket.off('carStats');
+            socket.off(`car/${carId}/stats`);
         };
     }, [carId]);
 
     const handleAction = async (action: string) => {
-        // Set pending state
         setPendingActions(prev => ({ ...prev, [action]: true }));
-
-        // Toggle the current state
         const newValue = !carState[action];
 
         try {
-            // Send MQTT event
-            await sendMqttEvent(carId, action, newValue);
-
-            // Optimistic update (will be overwritten by the actual server response)
+            // Use dedicated server actions for each control
+            if (action === 'lock') {
+                await setCarLock(carId, newValue);
+            } else if (action === 'lights') {
+                await setCarLights(carId, newValue);
+            } else if (action === 'climate') {
+                await setCarClimate(carId, newValue);
+            } else if (action === 'heating') {
+                await setCarHeating(carId, newValue);
+            } else {
+                throw new Error('Unknown action');
+            }
             setCarState(prev => ({ ...prev, [action]: newValue }));
         } catch (error) {
             console.error(`Error sending ${action} command:`, error);
