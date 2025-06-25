@@ -1,10 +1,10 @@
 # Architecture Documentation
 
-The PSE Cars project implements a microservices architecture with a single page application frontend.
+The PSE Cars project implements a microservices architecture with a multi page application frontend.
 The architecture is depicted in the following diagram:
 
 ![architecture-diagram](./assets/architecture-overview.png)
-To edit the architecture diagram, you can head to [Excalidraw](https://excalidraw.com/#json=UMViqL7yGEP9J_MtTu8xY,yi9mrHiOdnFlpbi4ghgdUw).
+To edit the architecture diagram, you can head to [Excalidraw](https://excalidraw.com/#json=CteJdKuwZ3ZDDSZukJ-0V,2cgVdbPOvB7bVVV7VhI8OQ).
 
 The PSE Cars project consists of the following components:
 - Frontend - MPA using the Next.js framework
@@ -17,5 +17,5 @@ The PSE Cars project consists of the following components:
   - Mosquitto MQTT broker for communication with the (mocked) car
 - Merch Service (implemented with Spring) providing data for the `Merchandise` page
   - PostgreSQL database to serve the merchandise data
-- IoT Service (implemented in Python) serving as a proxy to the Lightbulb for the `MyPSECar` page
+- IoT Service (implemented in NodeJS) serving as a proxy to the Lightbulb for the `MyPSECar` page
   - Mosquitto MQTT broker for communication with the (mocked) car
