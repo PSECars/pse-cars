@@ -1,6 +1,6 @@
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, TextField} from "@mui/material";
 import Button from "@/app/components/Button";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 export function SaveConfigurationDialog({
                                           open,
@@ -12,10 +12,12 @@ export function SaveConfigurationDialog({
   saveConfigurationCallback: (name: string) => void
 }) {
   const [name, setName] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (open) {
       setName("");
+      inputRef.current?.focus();
     }
   }, [open]);
 
@@ -40,6 +42,7 @@ export function SaveConfigurationDialog({
           This will allow you to retrieve it later.
         </DialogContentText>
         <TextField
+          inputRef={inputRef}
           value={name}
           onChange={e => setName(e.target.value)}
           autoFocus
