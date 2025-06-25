@@ -16,8 +16,23 @@ import MerchPreview from "./assets/merch-preview.webp";
 import {IconSun} from "@tabler/icons-react";
 import TextInput from "@/app/components/TextInput";
 import Logo from "@/app/assets/logo.webp";
+import Link from "next/link";
+import React from "react";
+import {MakeItYours} from "@/app/components/MakeItYours";
 
 export default function Home() {
+  const ConfiguratorLink = ({children}: {children: React.ReactNode}) => (
+    <Link href="./configurator" >
+      {children}
+    </Link>
+  );
+
+  const CarsLink = ({children}: {children: React.ReactNode}) => (
+    <Link href="./cars" >
+      {children}
+    </Link>
+  );
+
   return (
     <div className="overflow-x-hidden">
       <main className="flex flex-col items-center px-10 max-w-400 mx-auto bg-surface-primary">
@@ -27,19 +42,15 @@ export default function Home() {
                 <h1 className="text-5xl text-font-primary text-center font-medium leading-16">THE FUTURE OF DRIVING<br/>STARTS WITH PSECARS</h1>
                 <h4 className={"text-xl text-font-primary text-center font-normal leading-18"}>Where innovation meets elegance.</h4>
                 <div className={"flex flex-row gap-8"}>
-                    <Button onClick={() => {}}>
-                        Configure now
-                    </Button>
-                    <Button variant={"secondary"} onClick={() => {}}>
-                        Explore Models
-                    </Button>
+                  <ConfiguratorLink><Button>Configure now</Button></ConfiguratorLink>
+                  <CarsLink><Button>Explore Models</Button></CarsLink>
                 </div>
             </div>
         </section>
           <section className={"flex flex-col w-full py-16 gap-8"}>
               <div className={"flex flex-row justify-between"}>
                   <h2 className={"text-4xl font-medium"}>Models</h2>
-                  <Button onClick={() => {}}>Discover all Models</Button>
+                <CarsLink><Button>Discover all Models</Button></CarsLink>
               </div>
               <div className={"flex flex-row gap-8"}>
                   <ModelPreview image={Card1} modelName={"Tempest"} modelDescription={"Pure Performance"} />
@@ -48,15 +59,7 @@ export default function Home() {
                     <ModelPreview image={Card4} modelName={"Apex"} modelDescription={"Exceptional Luxury"} />
               </div>
           </section>
-          <section className={""}>
-                <div className={"flex flex-col w-full py-16 gap-8 text-center"}>
-                    <h2 className={"text-4xl font-medium"}>Make it yours.</h2>
-                    <p className={"text-lg font-normal text-font-secondary"}>Customize every detail of your dream car -<br/>
-                        from inventory to color.</p>
-                    <Button className={"mx-auto"} onClick={() => {}}>Start Configuring</Button>
-                </div>
-              <Image src={CarView} alt={""} className={"w-full h-auto"} />
-          </section>
+          <MakeItYours />
           <section className={"relative flex flex-col items-center justify-center w-full h-screen mt-16"}>
                 <Image src={Map} alt={""} className={"absolute object-cover w-screen h-screen"} fill />
                 <div className={"absolute flex flex-col items-center justify-center w-full h-full gap-8"}>

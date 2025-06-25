@@ -6,17 +6,26 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "fetch-openapi-types": "npx openapicmd typegen http://localhost:8080/v3/api-docs > app/http-client/openapi.d.ts"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@react-google-maps/api": "2.20.6",
     "mapbox-gl": "3.12.0",
     "next": "15.3.0",
+    "openapi-client-axios": "^7.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-map-gl": "8.0.4",
     "socket.io-client": "^4.8.1",
-    "uuid": "^11.1.0"
+    "three": "^0.176.0",
+    "uuid": "^11.1.0",
+    "@mui/material": "^7.1.2",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -26,6 +35,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-map-gl": "6.1.7",
+    "@types/three": "^0.176.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
     "tailwindcss": "^4",

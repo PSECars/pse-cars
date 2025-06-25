@@ -1,0 +1,20 @@
+services:
+  pse-cars-configurator-backend:
+    build:
+      context: ./
+    image: pse-cars/configurator/backend
+    environment:
+      DATABASE_URL: ${CONFIGURATOR_POSTGRES_URL}
+      DATABASE_NAME: ${CONFIGURATOR_POSTGRES_DB}
+      DATABASE_USER: ${CONFIGURATOR_POSTGRES_USER}
+      DATABASE_PASSWORD: ${CONFIGURATOR_POSTGRES_PASSWORD}
+
+  pse-cars-configurator-db:
+    image: postgres:17-alpine
+    restart: always
+    volumes:
+      - db-configurator:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${CONFIGURATOR_POSTGRES_DB}
+      POSTGRES_USER: ${CONFIGURATOR_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${CONFIGURATOR_POSTGRES_PASSWORD}
