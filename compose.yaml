@@ -60,12 +60,21 @@ services:
       - backend
       - default
 
-#  pse-cars-backend-merch:
-#    build:
-#      context: ./backend/merch
-#    image: pse-cars/backend/merch
-
-
+  keycloak:
+      image: quay.io/keycloak/keycloak:25.0
+      container_name: pse-cars-idp-keycloak
+      hostname: keycloak
+      command: start-dev --import-realm
+      environment:
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: admin
+        KC_HTTP_RELATIVE_PATH: "/"
+      ports:
+        - "8080:8080" 
+      volumes:
+        - ./config/keycloak:/opt/keycloak/data/import
+      networks:
+        - backend
 
 volumes:
   db-configurator:
