@@ -17,5 +17,5 @@ The PSE Cars project consists of the following components:
   - Mosquitto MQTT broker for communication with the (mocked) car
 - Merch Service (implemented with Spring) providing data for the `Merchandise` page
   - PostgreSQL database to serve the merchandise data
-- IoT Service (implemented in NodeJS) serving as a proxy to the Lightbulb for the `MyPSECar` page
+- IoT Service (implemented in Nest.js) serving as a proxy to the car for the `MyPSECar` page
   - Mosquitto MQTT broker for communication with the (mocked) car
