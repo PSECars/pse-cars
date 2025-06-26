@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { io, Socket } from 'socket.io-client'
 import Image from 'next/image'
 import CarView from '@/app/assets/car-view.webp'
-import { IconExternalLink } from '@tabler/icons-react'
 
 interface CarStatsProps {
     carId: string;

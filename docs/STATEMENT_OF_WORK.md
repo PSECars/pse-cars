@@ -16,6 +16,30 @@ Figma —> UI / UX Design
 
 ## Luca
 
+- **My PSE Car**
+  - IoT Service
+    - Implementation of the car state endpoints
+    - Integration of the Mosquitto message broker
+    - Implementation of the REST API and WebSocket
+    - Implementation of the carstats service to mock car data and hold car states in memory
+    - Setup of the compose.yaml
+    - Kong Integration
+  - Next.JS Frontend
+    - Implementation of the /my-pse-car frontend page using the design from Tayo
+
+
+- **NextJS Frontend**
+  - Implementation of the NextJS frontend
+  - Setup of the NextJs application
+  - Implementation of the Tailwind CSS custom config for Styling
+  - Implementation of the full homepage
+  - Every page designed is fully responsive
+
+
+- Other stuff:
+  - Improve Dockerfile by changing step order
+  - Documentation of my-pse-car and frontend in the /docs directory
+
 ## Kai
 
 * Architekturdiagramm 
