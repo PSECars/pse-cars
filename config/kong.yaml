@@ -33,6 +33,14 @@ services:
                 headers:
                   - "X-Forwarded-Prefix:/api/configurator"
 
+  - name: merch-service
+    url: http://merch-service:8083
+    routes:
+      - name: merch-route
+        paths:
+          - "/api/merch/"
+        strip_path: true
+
   - name: frontend-service
     url: http://pse-cars-frontend:3000
     routes:

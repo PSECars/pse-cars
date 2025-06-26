@@ -5,14 +5,14 @@ import { Product, Category, Cart, ProductFilters, PageableResponse, ApiResponse 
 const getApiBaseUrl = () => {
   // Check if we're in browser (client-side)
   const isClient = typeof window !== 'undefined';
-  
+
   if (isClient) {
     // Browser environment - detect if we're in Docker or local development
     const hostname = window.location.hostname;
     const protocol = window.location.protocol;
-    
+
     console.log(`[API Client] Browser environment detected. Hostname: ${hostname}`);
-    
+
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       // Local development - use localhost
       console.log('[API Client] Local development mode detected');
@@ -20,18 +20,18 @@ const getApiBaseUrl = () => {
     } else {
       // Docker deployment or production - use same hostname with backend port
       console.log('[API Client] Docker/Production mode detected');
-      return `${protocol}//${hostname}:8083/merch/api`;
+      return `${protocol}//${hostname}/api/merch/merch/api`;
     }
   }
-  
+
   // Server-side rendering (SSR) or Node.js environment
   const merchUrl = process.env.NEXT_PUBLIC_MERCH_URL;
-  
+
   if (merchUrl) {
     console.log(`[API Client] SSR environment using NEXT_PUBLIC_MERCH_URL: ${merchUrl}`);
     return `${merchUrl}/merch/api`;
   }
-  
+
   // Fallback for local development
   console.log('[API Client] Fallback to localhost for SSR');
   return 'http://localhost:8083/merch/api';
@@ -47,10 +47,10 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${API_BASE_URL}${endpoint}`;
-    
+
     try {
       console.log(`[API Client] ${options.method || 'GET'} ${url}`);
-      
+
       const response = await fetch(url, {
         credentials: 'include',
         headers: {
@@ -69,34 +69,34 @@ class ApiClient {
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`[API Client] Error ${response.status}:`, errorText);
-        
+
         // Specific error handling for network issues
         if (response.status === 0 || response.status >= 500) {
           throw new Error(`Network error: Unable to connect to backend service. Status: ${response.status}`);
         }
-        
+
         throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
 
       const result = await response.json();
       console.log(`[API Client] Success:`, !!result.success, 'Data type:', typeof result.data);
-      
+
       return result;
     } catch (error) {
       console.error('[API Client] Request failed:', error);
-      
+
       // Enhanced error reporting for debugging
       if (error instanceof TypeError && error.message.includes('fetch')) {
         console.error(`[API Client] Network connectivity issue. Check if backend is running and accessible at: ${API_BASE_URL}`);
         throw new Error(`Unable to connect to backend service at ${API_BASE_URL}. Please check if the service is running.`);
       }
-      
+
       throw error;
     }
   }
 
   // ===== CART METHODS =====
-  
+
   async getCart(): Promise<ApiResponse<Cart>> {
     return this.request<Cart>('/cart');
   }
@@ -107,12 +107,12 @@ class ApiClient {
 
   async addToCart(productId: number, quantity: number): Promise<ApiResponse<Cart>> {
     console.log(`[API Client] Adding product ${productId} with quantity ${quantity}`);
-    
+
     const result = await this.request<Cart>('/cart/items', {
       method: 'POST',
       body: JSON.stringify({ productId, quantity }),
     });
-    
+
     if (result.success && result.data) {
       const itemCount = result.data.totalQuantity || result.data.totalItemCount || 0;
       console.log(`[API Client] Cart updated successfully. Total items: ${itemCount}`);
@@ -125,7 +125,7 @@ class ApiClient {
     } else {
       console.error('[API Client] Add to cart failed:', result.message);
     }
-    
+
     return result;
   }
 
@@ -152,13 +152,13 @@ class ApiClient {
 
   async getProducts(filters: ProductFilters = {}): Promise<ApiResponse<PageableResponse<Product>>> {
     const params = new URLSearchParams();
-    
+
     if (filters.search) params.append('keyword', filters.search);
     if (filters.page !== undefined) params.append('page', filters.page.toString());
     if (filters.size !== undefined) params.append('size', filters.size.toString());
     if (filters.minPrice !== undefined) params.append('minPrice', filters.minPrice.toString());
     if (filters.maxPrice !== undefined) params.append('maxPrice', filters.maxPrice.toString());
-    
+
     if (filters.sort) {
       const sortParts = filters.sort.split(',');
       params.append('sortBy', sortParts[0]);
@@ -166,18 +166,18 @@ class ApiClient {
         params.append('sortDir', sortParts[1]);
       }
     }
-    
+
     if (filters.category) {
       try {
         const categoriesResponse = await this.getCategories();
         if (categoriesResponse.success) {
-          const category = categoriesResponse.data.find(c => 
+          const category = categoriesResponse.data.find(c =>
             c.name.toLowerCase() === filters.category?.toLowerCase()
           );
           if (category) {
             const queryString = params.toString();
-            const endpoint = queryString ? 
-              `/products/category/${category.id}?${queryString}` : 
+            const endpoint = queryString ?
+              `/products/category/${category.id}?${queryString}` :
               `/products/category/${category.id}`;
             return this.request<PageableResponse<Product>>(endpoint);
           }
@@ -189,7 +189,7 @@ class ApiClient {
 
     const queryString = params.toString();
     const endpoint = queryString ? `/products?${queryString}` : '/products';
-    
+
     return this.request<PageableResponse<Product>>(endpoint);
   }
 
@@ -204,12 +204,12 @@ class ApiClient {
   async searchProducts(keyword: string, filters: ProductFilters = {}): Promise<ApiResponse<PageableResponse<Product>>> {
     const params = new URLSearchParams();
     params.append('keyword', keyword);
-    
+
     if (filters.page !== undefined) params.append('page', filters.page.toString());
     if (filters.size !== undefined) params.append('size', filters.size.toString());
     if (filters.minPrice !== undefined) params.append('minPrice', filters.minPrice.toString());
     if (filters.maxPrice !== undefined) params.append('maxPrice', filters.maxPrice.toString());
-    
+
     if (filters.sort) {
       const sortParts = filters.sort.split(',');
       params.append('sortBy', sortParts[0]);
@@ -229,7 +229,7 @@ class ApiClient {
   }
 
   // ===== DEBUGGING METHODS =====
-  
+
   async testConnection(): Promise<boolean> {
     try {
       console.log('[API Client] Testing connection to backend...');
@@ -238,7 +238,7 @@ class ApiClient {
         headers: { 'Accept': 'application/json' },
         signal: AbortSignal.timeout(5000)
       });
-      
+
       console.log(`[API Client] Connection test result: ${response.status}`);
       return response.ok;
     } catch (error) {
@@ -271,6 +271,6 @@ if (typeof window !== 'undefined') {
       }
     }
   };
-  
+
   console.log('[API Client] Debug helpers added to window.debugApi');
 }
