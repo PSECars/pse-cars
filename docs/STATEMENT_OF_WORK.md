@@ -6,6 +6,9 @@
 
 ## Kai
 
+* Architekturdiagramm 
+* Kong-Integration
+
 ## Patrick
 
 ## Rasheed
