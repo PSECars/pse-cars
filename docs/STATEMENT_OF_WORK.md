@@ -31,7 +31,7 @@ Figma —> UI / UX Design
     - setup of OpenAPI
     - setup of influxdb connection
     - setup of mosquitto connection
-    - setup of REST API and WebSocket
+    - implementation of REST API and WebSocket
   - implementation of `world-drive` frontend
     - integration of the MapBox map
     - implementation of the weather component
