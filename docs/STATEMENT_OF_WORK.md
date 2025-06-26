@@ -1,15 +1,13 @@
 # Statement of Work
 
 ## Tayo
-### **World Drive Trail** (pair programming with Patrick)
-
+**World Drive Trail** (pair programming with Patrick)
 - Access to the InfluxDB
 - REST API (`/coordinates/trail`) with OpenAPI documentation
 - Parameterized HTTP calls in the frontend
     - Display of the trail in the Mapbox component
 
-### Figma —> UI / UX Design
-
+Figma —> UI / UX Design
 - Atomic Design
 - Design Library
 - UI/ UX Design of the whole website (with UI/ UX Best Practices: Atomic Design, 12 column grid, kli8 pt grid system, WCAG Guidelines)
