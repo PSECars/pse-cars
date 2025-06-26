@@ -10,6 +10,24 @@
 * Kong-Integration
 
 ## Patrick
+- World Drive
+  - implementation of `car-position-mock`
+  - setup of `influxdb`
+  - setup of `mosquitto` together with Luca
+  - implementation of `world-drive` service
+    - setup of backend 
+    - setup of OpenAPI
+    - setup of influxdb connection
+    - setup of mosquitto connection
+    - setup of REST API and WebSocket
+  - implementation of `world-drive` frontend
+    - integration of the MapBox map
+    - implementation of the weather component
+  - setup of `world-drive` `Dockerfile` and `compose.yaml`
+- General
+  - documentation of the general architecture we discussed TOGETHER IN THE GROUP
+  - (tried to deploy the whole project on Google Cloud Kubernetes and then on Google Cloud VM)
+    - (sadly this didn't work because kubernetes needed too much changes in the project and I started the VM approach too short before the presentation to make the necessary hostname changes throughout the whole project)
 
 ## Rasheed
 

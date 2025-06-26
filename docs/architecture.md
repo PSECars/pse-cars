@@ -4,7 +4,7 @@ The PSE Cars project implements a microservices architecture with a multi page a
 The architecture is depicted in the following diagram:
 
 ![architecture-diagram](./assets/architecture-overview.png)
-To edit the architecture diagram, you can head to [Excalidraw](https://excalidraw.com/#json=CteJdKuwZ3ZDDSZukJ-0V,2cgVdbPOvB7bVVV7VhI8OQ).
+To edit the architecture diagram, you can head to [Excalidraw](https://excalidraw.com/#json=ujrgKpY2DVkpNmMlFyDXF,Js7jK8uEjqFlV7GC74WlrQ).
 
 The PSE Cars project consists of the following components:
 - Frontend - MPA using the Next.js framework
