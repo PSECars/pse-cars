@@ -60,6 +60,7 @@ Figma —> UI / UX Design
     - integration of the MapBox map
     - implementation of the weather component
   - setup of `world-drive` `Dockerfile` and `compose.yaml`
+  - documentation of the world-drive architecture in the `/docs` folder
 - General
   - documentation of the general architecture we discussed TOGETHER IN THE GROUP
   - (tried to deploy the whole project on Google Cloud Kubernetes and then on Google Cloud VM)
