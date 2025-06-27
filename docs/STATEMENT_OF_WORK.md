@@ -67,7 +67,23 @@ Figma —> UI / UX Design
     - (sadly this didn't work because kubernetes needed too much changes in the project and I started the VM approach too short before the presentation to make the necessary hostname changes throughout the whole project)
 
 ## Rasheed
-
+  ##### Merchandise (Merch)
+  # Backend:
+  - Merch-Shop with Spring Boot and Spring Data JPA
+  - Merch-DB- PostgreSQl and "outcommented" Redis Cache
+  - ErrorHandling and Exceptions
+  - Initialization .sql Script with schema and data
+  # Frontend:
+  - /Merchandise Route with Next.js and Typescript
+  - Product Pages / ProductDetails Pages
+  - Cart
+  - Adaptations of main page / layout / global.css
+  # Docker:
+  - Dockerfile / compose.yml and shared-compose.yml
+  - merch-service
+  - merch-db
+  - merch-redis
+ 
 ## Axel
 
  - created basic Dockerfile for NextJS
