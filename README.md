@@ -23,3 +23,5 @@ d The subdirectory `compose.yaml` files should contain all necessary services fo
 
 ## Documentation
 For detailed documentation of the project and its architecture, please refer to the `docs` directory.
+
+The `STATEMENT_OF_WORK.md` file is also located in the `docs` directory.
